@@ -16,7 +16,10 @@ export default {
     emailList: [],
   }),
   computed: {
-    ...mapState(['currentProject', 'allUsers']),
+    ...mapState([
+      'currentProject',
+      'allUsers',
+    ]),
     permissions() {
       return this.currentProject.settings.permissions;
     },
@@ -62,8 +65,12 @@ export default {
     this.emailList = this.currentProject.settings.default_email_recipients;
   },
   methods: {
-    ...mapActions(['loadAllUsers']),
-    ...mapMutations(['setCurrentProject']),
+    ...mapActions([
+      'loadAllUsers',
+    ]),
+    ...mapMutations([
+      'setCurrentProject',
+    ]),
     getGroup(user) {
       return Object.entries(this.permissions).filter(
         ([, value]) => (value as any).includes(user),

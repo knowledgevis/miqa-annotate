@@ -42,7 +42,10 @@ export default {
       'currentTaskOverview',
       'currentProject',
     ]),
-    ...mapGetters(['currentScan', 'currentExperiment']),
+    ...mapGetters([
+      'currentScan',
+      'currentExperiment',
+    ]),
     orderedExperiments() {
       return this.experimentIds.map((expId) => this.experiments[expId]);
     },

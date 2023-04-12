@@ -32,7 +32,9 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setSliceLocation']),
+    ...mapMutations([
+      'setSliceLocation',
+    ]),
     convertDecisionToColor(decision) {
       if (decision === 'UN') return 'red--text text--darken-2';
       if (decision === 'U') return 'green--text text--darken-2';
