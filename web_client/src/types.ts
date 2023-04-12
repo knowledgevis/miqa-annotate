@@ -3,6 +3,10 @@
 /* eslint no-shadow: "off" */
 import type { WorkerPool } from 'itk/WorkerPool';
 
+// TODO: Throughout we have snake case properties, these
+// could be converted to camel case using:
+// https://morioh.com/p/8e8b33c25ea1
+
 interface ResponseData {
   detail: string,
   errors: string[],
@@ -31,7 +35,7 @@ interface Email {
 interface Experiment {
   id: string,
   name: string,
-  lock_owner: { // TODO: Can remove?
+  lock_owner: {
     id: number,
     username: string,
   },
@@ -51,7 +55,9 @@ interface Frame {
   scan: string,
   extension: string,
   experiment?: string,
+  // TODO: Passed in from Python as { results: {}, evaluation_model: string }
   frame_evaluation?: string,
+  // TODO: Also has download_url
 }
 
 interface MIQAConfig {
@@ -108,11 +114,11 @@ interface Scan {
   // eslint-disable-next-line no-use-before-define
   decisions: ScanDecision[],
   frames: Frame[],
-  subject_id: string, // TODO: Can remove?
+  subject_id: string,
   subjectID: string,
-  session_id: string, // TODO: Can remove?
+  session_id: string,
   sessionID: string,
-  scan_link: string, // TODO: Can remove?
+  scan_link: string,
   link: string,
   notes: string,
   cumulativeRange?: number,
@@ -125,8 +131,7 @@ interface ScanDecision {
   decision: string,
   note: string,
   user_identified_artifacts: {
-    present: string[],
-    absent: string[],
+    [key: string]: string,
   },
   location: {
     i: number,
