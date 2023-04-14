@@ -25,7 +25,7 @@ export default defineComponent({
   },
   inject: ['user', 'MIQAConfig'],
   setup() {
-    const switchReviewMode = store.commit('switchReviewMode');
+    const switchReviewMode = store.commit('SET_REVIEW_MODE');
     const loadingProjects = ref(true);
     store.dispatch('loadProjects').then(() => {
       loadingProjects.value = false;
@@ -73,7 +73,7 @@ export default defineComponent({
       if (currentProject.value) {
         const taskOverview = await djangoRest.projectTaskOverview(currentProject.value.id);
         if (JSON.stringify(store.state.currentTaskOverview) !== JSON.stringify(taskOverview)) {
-          store.commit('setTaskOverview', taskOverview);
+          store.commit('SET_TASK_OVERVIEW', taskOverview);
         }
       }
     }
@@ -82,7 +82,7 @@ export default defineComponent({
       projects.value.forEach(
         async (project: Project) => {
           const taskOverview = await djangoRest.projectTaskOverview(project.id);
-          store.commit('setTaskOverview', taskOverview);
+          await store.commit('SET_TASK_OVERVIEW', taskOverview);
         },
       );
     }
@@ -93,7 +93,7 @@ export default defineComponent({
           (project) => project.id === window.location.hash.split('/')[1],
         );
         const targetProject = projects.value[targetProjectIndex];
-        if (targetProject) store.commit('setCurrentProject', targetProject);
+        if (targetProject) store.commit('SET_CURRENT_PROJECT', targetProject);
         selectedProjectIndex.value = targetProjectIndex;
       }
     }

@@ -48,7 +48,7 @@ const djangoClient = {
     // mark user not-idle
     apiClient.interceptors.request.use(async (config) => {
       await oauthClient.maybeRestoreLogin();
-      await store.commit('updateLastApiRequestTime');
+      await store.commit('UPDATE_LAST_API_REQUEST_TIME');
 
       return config;
     }, (error) => Promise.reject(error));

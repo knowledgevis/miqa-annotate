@@ -21,6 +21,16 @@ import { proxy } from '../vtk';
 import { getView } from '../vtk/viewManager';
 import { ijkMapping } from '../vtk/constants';
 
+import {
+  RESET_STATE, SET_MIQA_CONFIG, SET_ME, SET_ALL_USERS, RESET_PROJECT_STATE, SET_CURRENT_FRAME_ID,
+  SET_FRAME, SET_SCAN, SET_RENDER_ORIENTATION, SET_CURRENT_PROJECT, SET_GLOBAL_SETTINGS,
+  SET_TASK_OVERVIEW, SET_PROJECTS, ADD_SCAN_DECISION, SET_FRAME_EVALUATION, SET_CURRENT_SCREENSHOT,
+  ADD_SCREENSHOT, REMOVE_SCREENSHOT, UPDATE_LAST_API_REQUEST_TIME, SET_LOADING_FRAME,
+  SET_ERROR_LOADING_FRAME, ADD_SCAN_FRAMES, ADD_EXPERIMENT_SCANS, ADD_EXPERIMENT,
+  UPDATE_EXPERIMENT, SET_WINDOW_LOCKED, SET_SCAN_CACHED_PERCENTAGE, SET_SLICE_LOCATION,
+  SET_CURRENT_VTK_INDEX_SLICES, SET_SHOW_CROSSHAIRS, SET_STORE_CROSSHAIRS, SET_REVIEW_MODE
+} from './mutation-types';
+
 const { convertItkToVtkImage } = ITKHelper;
 
 Vue.use(Vuex);
@@ -181,7 +191,7 @@ function poolFunction(webWorker, taskInfo) {
 
 function progressHandler(completed, total) {
   const percentComplete = completed / total;
-  store.commit('setScanCachedPercentage', percentComplete);
+  store.commit('SET_SCAN_CACHED_PERCENTAGE', percentComplete);
 }
 
 function startReaderWorkerPool() {
@@ -359,9 +369,6 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     lastApiRequestTime: Date.now(),
   },
   getters: {
-    wholeState(state) {
-      return state;
-    },
     currentViewData(state) {
       const currentFrame = state.currentFrameId ? state.frames[state.currentFrameId] : null;
       const scan = currentFrame ? state.scans[currentFrame.scan] : undefined;
@@ -443,21 +450,21 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     },
   },
   mutations: {
-    reset(state) {
+    [RESET_STATE](state) {
       Object.assign(state, { ...state, ...initState });
     },
-    setMIQAConfig(state, configuration) {
+    [SET_MIQA_CONFIG](state, configuration) {
       if (!configuration) configuration = {};
       if (!configuration.version) configuration.version = '';
       state.MIQAConfig = configuration;
     },
-    setMe(state, me) {
+    [SET_ME](state, me) {
       state.me = me;
     },
-    setAllUsers(state, allUsers) {
+    [SET_ALL_USERS](state, allUsers) {
       state.allUsers = allUsers;
     },
-    resetProject(state) {
+    [RESET_PROJECT_STATE](state) {
       state.experimentIds = [];
       state.experiments = {};
       state.experimentScans = {};
@@ -465,33 +472,33 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       state.scanFrames = {};
       state.frames = {};
     },
-    setCurrentFrameId(state, frameId) {
+    [SET_CURRENT_FRAME_ID](state, frameId) {
       state.currentFrameId = frameId;
     },
-    setFrame(state, { frameId, frame }) {
+    [SET_FRAME](state, { frameId, frame }) {
       // Replace with a new object to trigger a Vuex update
       state.frames = { ...state.frames };
       state.frames[frameId] = frame;
     },
-    setScan(state, { scanId, scan }) {
+    [SET_SCAN](state, { scanId, scan }) {
       // Replace with a new object to trigger a Vuex update
       state.scans = { ...state.scans };
       state.scans[scanId] = scan;
     },
-    setRenderOrientation(state, anatomy) {
+    [SET_RENDER_ORIENTATION](state, anatomy) {
       state.renderOrientation = anatomy;
     },
-    setCurrentProject(state, project: Project | null) {
+    [SET_CURRENT_PROJECT](state, project: Project | null) {
       state.currentProject = project;
       if (project) {
         state.renderOrientation = project.settings.anatomy_orientation;
         state.currentProjectPermissions = project.settings.permissions;
       }
     },
-    setGlobalSettings(state, settings) {
+    [SET_GLOBAL_SETTINGS](state, settings) {
       state.globalSettings = settings;
     },
-    setTaskOverview(state, taskOverview: ProjectTaskOverview) {
+    [SET_TASK_OVERVIEW](state, taskOverview: ProjectTaskOverview) {
       if (!taskOverview) return;
       if (taskOverview.scan_states) {
         state.projects.find(
@@ -512,62 +519,62 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         });
       }
     },
-    setProjects(state, projects: Project[]) {
+    [SET_PROJECTS](state, projects: Project[]) {
       state.projects = projects;
     },
-    addScanDecision(state, { currentScan, newDecision }) {
+    [ADD_SCAN_DECISION](state, { currentScan, newDecision }) {
       state.scans[currentScan].decisions.push(newDecision);
     },
-    setFrameEvaluation(state, evaluation) {
+    [SET_FRAME_EVALUATION](state, evaluation) {
       const currentFrame = state.currentFrameId ? state.frames[state.currentFrameId] : null;
       if (currentFrame) {
         currentFrame.frame_evaluation = evaluation;
       }
     },
-    setCurrentScreenshot(state, screenshot) {
+    [SET_CURRENT_SCREENSHOT](state, screenshot) {
       state.currentScreenshot = screenshot;
     },
-    addScreenshot(state, screenshot) {
+    [ADD_SCREENSHOT](state, screenshot) {
       state.screenshots.push(screenshot);
     },
-    removeScreenshot(state, screenshot) {
+    [REMOVE_SCREENSHOT](state, screenshot) {
       state.screenshots.splice(state.screenshots.indexOf(screenshot), 1);
     },
-    updateLastApiRequestTime(state) {
+    [UPDATE_LAST_API_REQUEST_TIME](state) {
       state.lastApiRequestTime = Date.now();
     },
-    setLoadingFrame(state, value) {
+    [SET_LOADING_FRAME](state, value) {
       state.loadingFrame = value;
     },
-    setErrorLoadingFrame(state, value) {
+    [SET_ERROR_LOADING_FRAME](state, value) {
       state.errorLoadingFrame = value;
     },
-    addScanFrames(state, { sid, id }) {
+    [ADD_SCAN_FRAMES](state, { sid, id }) {
       state.scanFrames[sid].push(id);
     },
-    addExperimentScans(state, { eid, sid }) {
+    [ADD_EXPERIMENT_SCANS](state, { eid, sid }) {
       state.scanFrames[sid] = [];
       state.experimentScans[eid].push(sid);
     },
-    addExperiment(state, { id, value }) {
+    [ADD_EXPERIMENT](state, { id, value }) {
       state.experimentScans[id] = [];
       if (!state.experimentIds.includes(id)) {
         state.experimentIds.push(id);
       }
       state.experiments[id] = value;
     },
-    updateExperiment(state, experiment) {
+    [UPDATE_EXPERIMENT](state, experiment) {
       // Necessary for reactivity
       state.experiments = { ...state.experiments };
       state.experiments[experiment.id] = experiment;
     },
-    setWindowLocked(state, lockState) {
+    [SET_WINDOW_LOCKED](state, lockState) {
       state.windowLocked = lockState;
     },
-    setScanCachedPercentage(state, percentComplete) {
+    [SET_SCAN_CACHED_PERCENTAGE](state, percentComplete) {
       state.scanCachedPercentage = percentComplete;
     },
-    setSliceLocation(state, ijkLocation) {
+    [SET_SLICE_LOCATION](state, ijkLocation) {
       if (Object.values(ijkLocation).every((value) => value !== undefined)) {
         state.vtkViews.forEach(
           (view) => {
@@ -578,7 +585,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         );
       }
     },
-    setCurrentVtkIndexSlices(state, { indexAxis, value }) {
+    [SET_CURRENT_VTK_INDEX_SLICES](state, { indexAxis, value }) {
       state[`${indexAxis}IndexSlice`] = value;
       state.sliceLocation = undefined;
     },
@@ -588,13 +595,13 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     setCurrentWindowLevel(state, value) {
       state.currentWindowLevel = value;
     },
-    setShowCrosshairs(state, show) {
+    [SET_SHOW_CROSSHAIRS](state, show) {
       state.showCrosshairs = show;
     },
-    setStoreCrosshairs(state, value) {
+    [SET_STORE_CROSSHAIRS](state, value) {
       state.storeCrosshairs = value;
     },
-    switchReviewMode(state, mode) {
+    [SET_REVIEW_MODE](state, mode) {
       state.reviewMode = mode || false;
     },
   },
@@ -604,44 +611,44 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         state.workerPool.cancel(taskRunId);
         taskRunId = -1;
       }
-      commit('reset');
+      commit('RESET_STATE');
       fileCache.clear();
       frameCache.clear();
     },
     async loadConfiguration({ commit }) {
       const configuration = await djangoRest.MIQAConfig();
-      commit('setMIQAConfig', configuration);
+      commit('SET_MIQA_CONFIG', configuration);
     },
     async loadMe({ commit }) {
       const me = await djangoRest.me();
-      commit('setMe', me);
+      commit('SET_ME', me);
     },
     async loadAllUsers({ commit }) {
       const allUsers = await djangoRest.allUsers();
-      commit('setAllUsers', allUsers.results);
+      commit('SET_ALL_USERS', allUsers.results);
     },
     async loadGlobal({ commit }) {
       const globalSettings = await djangoRest.globalSettings();
-      commit('setCurrentProject', null);
-      commit('setGlobalSettings', {
+      commit('SET_CURRENT_PROJECT', null);
+      commit('SET_GLOBAL_SETTINGS', {
         import_path: globalSettings.import_path,
         export_path: globalSettings.export_path,
       });
-      commit('setTaskOverview', {});
+      commit('SET_TASK_OVERVIEW', {});
     },
     async loadProjects({ commit }) {
       const projects = await djangoRest.projects();
-      commit('setProjects', projects);
+      commit('SET_PROJECTS', projects);
     },
     async loadProject({ commit }, project: Project) {
-      commit('resetProject');
+      commit('RESET_PROJECT_STATE');
 
       // Build navigation links throughout the frame to improve performance.
       let firstInPrev = null;
 
       // Refresh the project from the API
       project = await djangoRest.project(project.id);
-      commit('setCurrentProject', project);
+      commit('SET_CURRENT_PROJECT', project);
 
       // place data in state
       const { experiments } = project;
@@ -650,7 +657,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         const experiment = experiments[i];
         // set experimentScans[experiment.id] before registering the experiment.id
         // so ExperimentsView doesn't update prematurely
-        commit('addExperiment', {
+        commit('ADD_EXPERIMENT', {
           id: experiment.id,
           value: {
             id: experiment.id,
@@ -667,13 +674,13 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         const { scans } = experiment;
         for (let j = 0; j < scans.length; j += 1) {
           const scan = scans[j];
-          commit('addExperimentScans', { eid: experiment.id, sid: scan.id });
+          commit('ADD_EXPERIMENT_SCANS', { eid: experiment.id, sid: scan.id });
 
           // TODO these requests *can* be run in parallel, or collapsed into one XHR
           // eslint-disable-next-line no-await-in-loop
           const { frames } = scan;
 
-          commit('setScan', {
+          commit('SET_SCAN', {
             scanId: scan.id,
             scan: {
               id: scan.id,
@@ -691,8 +698,8 @@ export const storeConfig:StoreOptions<MIQAStore> = {
 
           for (let k = 0; k < frames.length; k += 1) {
             const frame = frames[k];
-            commit('addScanFrames', { sid: scan.id, id: frame.id });
-            commit('setFrame', {
+            commit('ADD_SCAN_FRAMES', { sid: scan.id, id: frame.id });
+            commit('SET_FRAME', {
               frameId: frame.id,
               frame: {
                 ...frame,
@@ -718,14 +725,14 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       }
       // get the task overview for this project
       const taskOverview = await djangoRest.projectTaskOverview(project.id);
-      commit('setTaskOverview', taskOverview);
+      commit('SET_TASK_OVERVIEW', taskOverview);
     },
     async reloadScan({ commit, getters }, scanId) {
       const { currentFrame } = getters;
       scanId = scanId || currentFrame.scan;
       if (!scanId) return;
       const scan = await djangoRest.scan(scanId);
-      commit('setScan', {
+      commit('SET_SCAN', {
         scanId: scan.id,
         scan: {
           id: scan.id,
@@ -756,7 +763,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       return state.scans[scanId];
     },
     async setCurrentFrame({ commit }, frameId) {
-      commit('setCurrentFrameId', frameId);
+      commit('SET_CURRENT_FRAME_ID', frameId);
     },
     async swapToFrame({
       state, dispatch, getters, commit,
@@ -764,8 +771,8 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       if (!frame) {
         throw new Error("frame id doesn't exist");
       }
-      commit('setLoadingFrame', true);
-      commit('setErrorLoadingFrame', false);
+      commit('SET_LOADING_FRAME', true);
+      commit('SET_ERROR_LOADING_FRAME', false);
 
       if (loadAll) {
         const oldScan = getters.currentScan;
@@ -834,7 +841,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       if (loadAll && state.windowLocked.lock) {
         const { currentViewData } = getters;
         const unlock = () => {
-          commit('setWindowLocked', {
+          commit('SET_WINDOW_LOCKED', {
             lock: false,
             duration: undefined,
             target: undefined,
@@ -859,12 +866,12 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     async setLock({ commit }, { experimentId, lock, force }) {
       if (lock) {
         commit(
-          'updateExperiment',
+          'UPDATE_EXPERIMENT',
           await djangoRest.lockExperiment(experimentId, force),
         );
       } else {
         commit(
-          'updateExperiment',
+          'UPDATE_EXPERIMENT',
           await djangoRest.unlockExperiment(experimentId),
         );
       }

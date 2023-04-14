@@ -62,7 +62,7 @@ export default defineComponent({
             export_path: exportPath.value.trim(),
             anatomy_orientation: anatomyOrientation.value,
           });
-          store.commit('setRenderOrientation', anatomyOrientation.value);
+          store.commit('SET_RENDER_ORIENTATION', anatomyOrientation.value);
         }
         changed.value = false;
       } catch (e) {
