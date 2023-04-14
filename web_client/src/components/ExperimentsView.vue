@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'switchReviewMode',
+      'SET_REVIEW_MODE',
     ]),
     ...mapActions([
       'loadProject',
@@ -171,7 +171,7 @@ export default {
           ) as { id: string, name: string }).id;
         }
         await djangoRest.uploadToExperiment(experimentId, this.fileSetForUpload);
-        this.loadProject(this.currentProject);
+        await this.loadProject(this.currentProject);
         this.showUploadModal = false;
       } catch (ex) {
         const text = ex || 'Upload failed due to server error.';
@@ -216,7 +216,7 @@ export default {
           dense
           style="display: inline-block; max-height: 40px; max-width: 60px;"
           class="px-3 ma-0"
-          @change="switchReviewMode"
+          @change="SET_REVIEW_MODE"
         />
         <span>Scans for my review</span>
       </v-subheader>

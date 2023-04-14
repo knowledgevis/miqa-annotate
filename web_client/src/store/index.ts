@@ -28,7 +28,7 @@ import {
   ADD_SCREENSHOT, REMOVE_SCREENSHOT, UPDATE_LAST_API_REQUEST_TIME, SET_LOADING_FRAME,
   SET_ERROR_LOADING_FRAME, ADD_SCAN_FRAMES, ADD_EXPERIMENT_SCANS, ADD_EXPERIMENT,
   UPDATE_EXPERIMENT, SET_WINDOW_LOCKED, SET_SCAN_CACHED_PERCENTAGE, SET_SLICE_LOCATION,
-  SET_CURRENT_VTK_INDEX_SLICES, SET_SHOW_CROSSHAIRS, SET_STORE_CROSSHAIRS, SET_REVIEW_MODE
+  SET_CURRENT_VTK_INDEX_SLICES, SET_SHOW_CROSSHAIRS, SET_STORE_CROSSHAIRS, SET_REVIEW_MODE,
 } from './mutation-types';
 
 const { convertItkToVtkImage } = ITKHelper;
@@ -44,14 +44,16 @@ const poolSize = Math.floor(navigator.hardwareConcurrency / 2) || 2;
 let taskRunId = -1;
 let savedWorker = null;
 
-function shrinkProxyManager(proxyManager) {
+/** Delete existing VTK.js proxyManager views */
+function shrinkProxyManager(proxyManager: vtkProxyManager) {
   proxyManager.getViews().forEach((view) => {
     view.setContainer(null);
     proxyManager.deleteProxy(view);
   });
 }
 
-function prepareProxyManager(proxyManager) {
+/** Renders each view. Also disables Axes visibility and sets InterpolationType to nearest */
+function prepareProxyManager(proxyManager: vtkProxyManager) {
   if (!proxyManager.getViews().length) {
     ['View2D_Z:z', 'View2D_X:x', 'View2D_Y:y'].forEach((type) => {
       const view = getView(proxyManager, type);
@@ -71,6 +73,7 @@ function prepareProxyManager(proxyManager) {
   }
 }
 
+/** Array name is file name minus last extension, e.g. image.nii.gz => image.nii */
 function getArrayName(filename) {
   const idx = filename.lastIndexOf('.');
   const name = idx > -1 ? filename.substring(0, idx) : filename;
@@ -109,7 +112,7 @@ function getData(id, file, webWorker = null) {
     }
   });
 }
-
+/** Load file, from cache if possible. */
 function loadFile(frame, { onDownloadProgress = null } = {}) {
   if (fileCache.has(frame.id)) {
     return { frameId: frame.id, fileP: fileCache.get(frame.id) };
@@ -130,6 +133,7 @@ function loadFile(frame, { onDownloadProgress = null } = {}) {
   return { frameId: frame.id, fileP: promise };
 }
 
+/** Gets the data from the selected image file using a webWorker. */
 function loadFileAndGetData(frame, { onDownloadProgress = null } = {}) {
   const loadResult = loadFile(frame, { onDownloadProgress });
   return loadResult.fileP.then((file) => getData(frame.id, file, savedWorker)
@@ -189,11 +193,13 @@ function poolFunction(webWorker, taskInfo) {
   });
 }
 
+/** Calculates the percent downloaded of currently loading frames */
 function progressHandler(completed, total) {
   const percentComplete = completed / total;
   store.commit('SET_SCAN_CACHED_PERCENTAGE', percentComplete);
 }
 
+/** Creates array of tasks to run then runs tasks in parallel. */
 function startReaderWorkerPool() {
   const taskArgsArray = readDataQueue.map((taskInfo) => [taskInfo]);
   readDataQueue = [];
@@ -216,6 +222,8 @@ function startReaderWorkerPool() {
     });
 }
 
+/** Queues scan for download, will load all frames for a target
+ * scan if the scan has not already been loaded. */
 function queueLoadScan(scan, loadNext = 0) {
   // load all frames in target scan
   if (!loadedData.includes(scan.id)) {
@@ -232,6 +240,7 @@ function queueLoadScan(scan, loadNext = 0) {
   }
 
   if (loadNext > 0) {
+    // Get the other scans in the experiment.
     const scansInSameExperiment = store.state.experimentScans[scan.experiment];
     let nextScan;
     if (scan.id === scansInSameExperiment[scansInSameExperiment.length - 1]) {
@@ -322,7 +331,11 @@ const initState = {
     NORMAL_USERS_CAN_CREATE_PROJECTS: false,
     S3_SUPPORT: true,
   },
-  me: null,
+  me: {
+    username: null,
+    id: null,
+    is_superuser: false,
+  },
   allUsers: [],
   reviewMode: true,
   globalSettings: undefined as ProjectSettings,
@@ -379,7 +392,9 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       const experiment = currentFrame.experiment
         ? state.experiments[currentFrame.experiment] : null;
       const project = state.projects.filter((x) => x.id === experiment.project)[0];
+      // Get list of scans for current experiment
       const experimentScansList = state.experimentScans[experiment.id];
+      // Get list of frames associated with current scan
       const scanFramesList = state.scanFrames[scan.id];
 
       const scanOrder = Object.values(state.experimentScans).flat().filter(includeScan);
@@ -409,6 +424,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         currentAutoEvaluation: currentFrame.frame_evaluation,
       };
     },
+    /** Gets the current frame when given a frameId */
     currentFrame(state) {
       return state.currentFrameId ? state.frames[state.currentFrameId] : null;
     },
@@ -606,6 +622,8 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     },
   },
   actions: {
+    /** Reset the Vuex state of MIQA, cancel any existing tasks in the workerPool, clear file
+     * and frame caches */
     reset({ state, commit }) {
       if (taskRunId >= 0) {
         state.workerPool.cancel(taskRunId);
@@ -615,18 +633,22 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       fileCache.clear();
       frameCache.clear();
     },
+    /** Pulls configuration from API and loads it into state */
     async loadConfiguration({ commit }) {
       const configuration = await djangoRest.MIQAConfig();
       commit('SET_MIQA_CONFIG', configuration);
     },
+    /** Pulls user from API and loads it into state */
     async loadMe({ commit }) {
       const me = await djangoRest.me();
       commit('SET_ME', me);
     },
+    /** Pulls all users from API and loads into state */
     async loadAllUsers({ commit }) {
       const allUsers = await djangoRest.allUsers();
       commit('SET_ALL_USERS', allUsers.results);
     },
+    /** Pulls global settings from API and updates currentProject and globalSettings in state */
     async loadGlobal({ commit }) {
       const globalSettings = await djangoRest.globalSettings();
       commit('SET_CURRENT_PROJECT', null);
@@ -636,10 +658,12 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       });
       commit('SET_TASK_OVERVIEW', {});
     },
+    /** Pulls all projects from API and loads into state */
     async loadProjects({ commit }) {
       const projects = await djangoRest.projects();
       commit('SET_PROJECTS', projects);
     },
+    /** Pulls an individual project from API and loads into state */
     async loadProject({ commit }, project: Project) {
       commit('RESET_PROJECT_STATE');
 
@@ -650,7 +674,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       project = await djangoRest.project(project.id);
       commit('SET_CURRENT_PROJECT', project);
 
-      // place data in state
+      // place data in state, adds each experiment to experiments
       const { experiments } = project;
 
       for (let i = 0; i < experiments.length; i += 1) {
@@ -669,6 +693,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
           },
         });
 
+        // Get the associated scans from the experiment
         // TODO these requests *can* be run in parallel, or collapsed into one XHR
         // eslint-disable-next-line no-await-in-loop
         const { scans } = experiment;
@@ -727,6 +752,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       const taskOverview = await djangoRest.projectTaskOverview(project.id);
       commit('SET_TASK_OVERVIEW', taskOverview);
     },
+    /** Add a scan to scans */
     async reloadScan({ commit, getters }, scanId) {
       const { currentFrame } = getters;
       scanId = scanId || currentFrame.scan;
@@ -751,6 +777,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       if (!scanId || !state.projects) {
         return undefined;
       }
+      // If currently loaded frameId does not match frameId to load
       if (!state.scans[scanId] && state.projects) {
         await dispatch('loadProjects');
         if (state.projects) {
@@ -848,6 +875,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
             associatedImage: undefined,
           });
         };
+        // Unlocks window if scan, experiment, or project has changed
         switch (state.windowLocked.duration) {
           case 'scan':
             if (currentViewData.scanId !== state.windowLocked.target) unlock();
@@ -863,6 +891,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         }
       }
     },
+    /** Sets a lock on the current experiment */
     async setLock({ commit }, { experimentId, lock, force }) {
       if (lock) {
         commit(

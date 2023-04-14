@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setSliceLocation',
+      'SET_SLICE_LOCATION',
     ]),
     convertDecisionToColor(decision) {
       if (decision === 'UN') return 'red--text text--darken-2';
@@ -41,7 +41,7 @@ export default {
       return 'grey--text text--darken-2';
     },
     goToLocation() {
-      this.setSliceLocation(this.decision.location);
+      this.SET_SLICE_LOCATION(this.decision.location);
     },
   },
 };

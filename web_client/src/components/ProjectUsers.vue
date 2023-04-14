@@ -69,7 +69,7 @@ export default {
       'loadAllUsers',
     ]),
     ...mapMutations([
-      'setCurrentProject',
+      'SET_CURRENT_PROJECT',
     ]),
     getGroup(user) {
       return Object.entries(this.permissions).filter(
@@ -106,7 +106,7 @@ export default {
         this.showAddCollaboratorOverlay = false;
         const changedProject = { ...this.currentProject };
         changedProject.settings.permissions = resp.permissions;
-        this.setCurrentProject(changedProject);
+        this.SET_CURRENT_PROJECT(changedProject);
       } catch (e) {
         this.$snackbar({
           text: 'Failed to save permissions.',
@@ -122,7 +122,7 @@ export default {
         const resp = await djangoRest.setProjectSettings(this.currentProject.id, newSettings);
         const changedProject = { ...this.currentProject };
         changedProject.settings.default_email_recipients = resp.default_email_recipients;
-        this.setCurrentProject(changedProject);
+        this.SET_CURRENT_PROJECT(changedProject);
       } catch (e) {
         this.$snackbar({
           text: 'Failed to save email list.',
