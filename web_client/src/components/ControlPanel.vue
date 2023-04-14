@@ -29,7 +29,7 @@ export default defineComponent({
     const currentFrame = computed(() => store.getters.currentFrame);
     const myCurrentProjectRoles = computed(() => store.getters.myCurrentProjectRoles);
 
-    const setLock = (lockParameters) => store.dispatch('SET_LOCK', lockParameters);
+    const setLock = (lockParameters) => store.dispatch('setLock', lockParameters);
     const setCurrentFrame = (frame) => store.commit('SET_CURRENT_FRAME', frame);
     const setShowCrosshairs = () => store.commit('SET_SHOW_CROSSHAIRS', showCrosshairs);
     const setStoreCrosshairs = () => store.commit('SET_STORE_CROSSHAIRS', storeCrosshairs);

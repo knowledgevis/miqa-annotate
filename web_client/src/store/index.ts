@@ -895,10 +895,10 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         console.log('Caught exception loading next frame');
         console.log(err);
         state.vtkViews = [];
-        commit('setErrorLoadingFrame', true);
+        commit('SET_ERROR_LOADING_FRAME', true);
       } finally {
         dispatch('setCurrentFrame', frame.id);
-        commit('setLoadingFrame', false);
+        commit('SET_LOADING_FRAME', false);
       }
 
       // check for window lock expiry
