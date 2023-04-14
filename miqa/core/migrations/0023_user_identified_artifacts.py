@@ -2,8 +2,6 @@
 
 from django.db import migrations, models
 
-import miqa.core.models.scan_decision
-
 
 class Migration(migrations.Migration):
     dependencies = [
@@ -14,8 +12,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scandecision',
             name='user_identified_artifacts',
-            field=models.JSONField(
-                default=dict
-            ),
+            field=models.JSONField(default=dict),
         ),
     ]

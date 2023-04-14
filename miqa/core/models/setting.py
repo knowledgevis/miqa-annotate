@@ -5,7 +5,8 @@ from django.db.models import Q
 
 
 class Setting(models.Model):
-    """Models an individual setting"""
+    """Models an individual setting."""
+
     class Meta:
         ordering = ('key',)
 
@@ -35,19 +36,25 @@ class Setting(models.Model):
         max_length=20,
         choices=SettingType.choices,
         default=SettingType.NS,
-     )
-    group = models.ForeignKey('self', blank=True, on_delete=models.SET_NULL,
-                              related_name='setting_group',
-                              null=True,
-                              limit_choices_to=Q(type__in=[
-                                  SettingType.GST,
-                                  SettingType.GAOT,
-                                  SettingType.GAT,
-                                  SettingType.GDCT,
-                                  SettingType.GEFMMT,
-                                  SettingType.GEMPT,
-                                  SettingType.GEMT
-                              ]))
+    )
+    group = models.ForeignKey(
+        'self',
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='setting_group',
+        null=True,
+        limit_choices_to=Q(
+            type__in=[
+                SettingType.GST,
+                SettingType.GAOT,
+                SettingType.GAT,
+                SettingType.GDCT,
+                SettingType.GEFMMT,
+                SettingType.GEMPT,
+                SettingType.GEMT,
+            ]
+        ),
+    )
     is_type = models.BooleanField(blank=True, null=False, default=False)
 
     def __str__(self):

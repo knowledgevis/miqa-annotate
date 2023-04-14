@@ -23,7 +23,7 @@ class ProjectSettingsSerializer(serializers.ModelSerializer):
             'permissions',
             'default_email_recipients',
             'anatomy_orientation',
-            'artifacts'
+            'artifacts',
         ]
 
     permissions = serializers.SerializerMethodField('get_permissions')

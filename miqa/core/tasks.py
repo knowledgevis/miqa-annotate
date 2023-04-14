@@ -69,8 +69,9 @@ def evaluate_frame_content(frame_id):
     frame = Frame.objects.get(id=frame_id)
     logging.debug(f'Frame: {frame}')
     # Get the model that matches the frame's file type
-    logging.debug(f'Eval Model Type Mappings: '
-                  f'{frame.scan.experiment.project.model_source_type_mappings}')
+    logging.debug(
+        f'Eval Model Type Mappings: ' f'{frame.scan.experiment.project.model_source_type_mappings}'
+    )
     eval_model_name = frame.scan.experiment.project.model_source_type_mappings[frame.scan.scan_type]
     logging.debug(f'Eval Model Name: {eval_model_name}')
     # Get the PyTorch model file name
@@ -131,8 +132,7 @@ def evaluate_data(frames_by_project):
             eval_model_file = project.model_mappings[model_name]
             # Get the predictions associated with the model
             eval_model_predictions = [
-                prediction_mapping
-                for prediction_mapping in project.model_predictions[model_name]
+                prediction_mapping for prediction_mapping in project.model_predictions[model_name]
             ]
             # Load the appropriate NNModel
             eval_model_nn = NNModel(eval_model_file, eval_model_predictions)

@@ -59,41 +59,56 @@ class Project(TimeStampedModel, models.Model):
     )
     evaluation_models = models.JSONField(default=default_evaluation_model_mapping)
     default_email_recipients = models.TextField(blank=True)
-    artifacts_group = models.ForeignKey('Setting', null=True, blank=True,
-                                        on_delete=models.SET_NULL, related_name="artifacts_group",
-                                        limit_choices_to={'type': 'GAT'})
-    files_to_models_group = models.ForeignKey('Setting', null=True, blank=True,
-                                              on_delete=models.SET_NULL,
-                                              related_name="files_to_models_group",
-                                              limit_choices_to={'type': 'GEFMMT'})
-    models_group = models.ForeignKey('Setting', null=True, blank=True,
-                                     on_delete=models.SET_NULL,
-                                     related_name="models_group",
-                                     limit_choices_to={'type': 'GEMT'})
-    predictions_group = models.ForeignKey('Setting', null=True, blank=True,
-                                          on_delete=models.SET_NULL,
-                                          related_name="predictions_group",
-                                          limit_choices_to={'type': 'GEMPT'})
+    artifacts_group = models.ForeignKey(
+        'Setting',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='artifacts_group',
+        limit_choices_to={'type': 'GAT'},
+    )
+    files_to_models_group = models.ForeignKey(
+        'Setting',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='files_to_models_group',
+        limit_choices_to={'type': 'GEFMMT'},
+    )
+    models_group = models.ForeignKey(
+        'Setting',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='models_group',
+        limit_choices_to={'type': 'GEMT'},
+    )
+    predictions_group = models.ForeignKey(
+        'Setting',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='predictions_group',
+        limit_choices_to={'type': 'GEMPT'},
+    )
 
     @property
     def artifacts(self) -> dict:
-        """Gets the list of artifacts associated with the project"""
+        """Gets the list of artifacts associated with the project."""
         if self.artifacts_group:
             artifacts = Setting.objects.filter(group__id=self.artifacts_group_id)
 
-            return {
-                artifact_name.key: ArtifactState.UNDEFINED.value
-                for artifact_name in artifacts
-            }
+            return {artifact_name.key: ArtifactState.UNDEFINED.value for artifact_name in artifacts}
         else:
             return {}
 
     @property
     def model_source_type_mappings(self) -> dict:
-        """Gets the list of file type to model mappings associated with the project"""
+        """Gets the list of file type to model mappings associated with the project."""
         if self.files_to_models_group:
             model_source_type_mappings = Setting.objects.filter(
-                group__id=self.files_to_models_group_id)
+                group__id=self.files_to_models_group_id
+            )
             this_model_source_type_mapping = {
                 model_source_type_mapping.key: model_source_type_mapping.value
                 for model_source_type_mapping in model_source_type_mappings
@@ -104,12 +119,11 @@ class Project(TimeStampedModel, models.Model):
 
     @property
     def model_mappings(self) -> dict:
-        """Gets the list of models associated with the project"""
+        """Gets the list of models associated with the project."""
         if self.models_group:
             model_mappings = Setting.objects.filter(group__id=self.models_group_id)
             this_model_mapping = {
-                model_mapping.key: model_mapping.value
-                for model_mapping in model_mappings
+                model_mapping.key: model_mapping.value for model_mapping in model_mappings
             }
             return this_model_mapping
         else:
@@ -117,11 +131,11 @@ class Project(TimeStampedModel, models.Model):
 
     @property
     def model_predictions(self) -> dict:
-        """Gets the list of predictions associated with the project"""
+        """Gets the list of predictions associated with the project."""
         if self.predictions_group:
             logging.debug(f'self.model_predictions_group: {self.predictions_group_id}')
             prediction_mappings = Setting.objects.filter(group__id=self.predictions_group_id)
-            logging.debug(f'project\'s prediction_mappings: {prediction_mappings}')
+            logging.debug(f"project's prediction_mappings: {prediction_mappings}")
             this_prediction_mapping = {}
             for prediction in prediction_mappings:
                 this_prediction_mapping.setdefault(prediction.key, []).append(prediction.value)
