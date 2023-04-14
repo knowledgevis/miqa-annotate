@@ -35,13 +35,20 @@ const { convertItkToVtkImage } = ITKHelper;
 
 Vue.use(Vuex);
 
+// Cache of downloaded files
 const fileCache = new Map();
 const frameCache = new Map();
+// Queue of frames to be downloaded
 let readDataQueue = [];
+// List of frames that have been successfully added to readDataQueue
 const loadedData = [];
+// Frames that need to be downloaded
 const pendingFrameDownloads = new Set<any>();
+// Maximum number of workers in WorkerPool
 const poolSize = Math.floor(navigator.hardwareConcurrency / 2) || 2;
+// Defines the task currently running
 let taskRunId = -1;
+// Reuse workers for performance
 let savedWorker = null;
 
 /** Delete existing VTK.js proxyManager views */
@@ -112,11 +119,14 @@ function getData(id, file, webWorker = null) {
     }
   });
 }
+
 /** Load file, from cache if possible. */
 function loadFile(frame, { onDownloadProgress = null } = {}) {
   if (fileCache.has(frame.id)) {
     return { frameId: frame.id, fileP: fileCache.get(frame.id) };
   }
+
+  // Otherwise download the frame
   let client = apiClient;
   let downloadURL = `/frames/${frame.id}/download`;
   if (frame.download_url) {
@@ -153,6 +163,10 @@ function loadFileAndGetData(frame, { onDownloadProgress = null } = {}) {
     }));
 }
 
+/**
+ * Use a worker to download image files. Only used by WorkerPool
+ * taskInfo  Object  Contains experimentId, scanId, and a frame object
+ */
 function poolFunction(webWorker, taskInfo) {
   return new Promise((resolve, reject) => {
     const { frame } = taskInfo;
@@ -201,6 +215,7 @@ function progressHandler(completed, total) {
 
 /** Creates array of tasks to run then runs tasks in parallel. */
 function startReaderWorkerPool() {
+  // Get the current array of tasks in readDataQueue
   const taskArgsArray = readDataQueue.map((taskInfo) => [taskInfo]);
   readDataQueue = [];
 
@@ -227,8 +242,10 @@ function startReaderWorkerPool() {
 function queueLoadScan(scan, loadNext = 0) {
   // load all frames in target scan
   if (!loadedData.includes(scan.id)) {
+    // For each scan in scanFrames
     store.state.scanFrames[scan.id].forEach(
       (frameId) => {
+        // Add to readDataQueue a request to get the frames associated with that scan
         readDataQueue.push({
           experimentId: scan.experiment,
           scanId: scan.id,
@@ -270,7 +287,7 @@ function queueLoadScan(scan, loadNext = 0) {
   }
 }
 
-// get next frame (across experiments and scans)
+/** Get next frame in specific experiment/scan */
 function getNextFrame(experiments, i, j) {
   const experiment = experiments[i];
   const { scans } = experiment;
@@ -291,9 +308,17 @@ function getNextFrame(experiments, i, j) {
   return nextScan.frames[0];
 }
 
+/**
+ * Expands individual scan range
+ *
+ * If the range (e.g. [0, 3819] in a scan is <> the range read from data,
+ * ensure that the ranges match
+ */
 function expandScanRange(frameId, dataRange) {
   if (frameId in store.state.frames) {
+    // Get the scanId from the frame.
     const scanId = store.state.frames[frameId].scan;
+    // Get the scan of specified scanId
     const scan = store.state.scans[scanId];
     if (scan && dataRange[0] < scan.cumulativeRange[0]) {
       [scan.cumulativeRange[0]] = dataRange;
@@ -304,6 +329,7 @@ function expandScanRange(frameId, dataRange) {
   }
 }
 
+/** Determines whether a scan will be displayed based on its reviewed status */
 export function includeScan(scanId) {
   if (store.state.reviewMode) {
     const myRole = store.state.currentTaskOverview?.my_project_role;
@@ -335,6 +361,7 @@ const initState = {
     username: null,
     id: null,
     is_superuser: false,
+    email: null,
   },
   allUsers: [],
   reviewMode: true,
@@ -572,6 +599,10 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       state.scanFrames[sid] = [];
       state.experimentScans[eid].push(sid);
     },
+    /**
+     * Add an experiment to state.experiments, it's id to state.experimentIds, and
+     * set state.experimentScans to an empty array
+     */
     [ADD_EXPERIMENT](state, { id, value }) {
       state.experimentScans[id] = [];
       if (!state.experimentIds.includes(id)) {
@@ -584,12 +615,14 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       state.experiments = { ...state.experiments };
       state.experiments[experiment.id] = experiment;
     },
+    /** Ensures that a specific image is being reviewed by a single individual */
     [SET_WINDOW_LOCKED](state, lockState) {
       state.windowLocked = lockState;
     },
     [SET_SCAN_CACHED_PERCENTAGE](state, percentComplete) {
       state.scanCachedPercentage = percentComplete;
     },
+    /** Saves the location of the cursor click related to a specific scan and decision */
     [SET_SLICE_LOCATION](state, ijkLocation) {
       if (Object.values(ijkLocation).every((value) => value !== undefined)) {
         state.vtkViews.forEach(
@@ -678,6 +711,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       const { experiments } = project;
 
       for (let i = 0; i < experiments.length; i += 1) {
+        // Get a specific experiment from the project
         const experiment = experiments[i];
         // set experimentScans[experiment.id] before registering the experiment.id
         // so ExperimentsView doesn't update prematurely
@@ -792,6 +826,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     async setCurrentFrame({ commit }, frameId) {
       commit('SET_CURRENT_FRAME_ID', frameId);
     },
+    /** Handles the process of changing frames */
     async swapToFrame({
       state, dispatch, getters, commit,
     }, { frame, onDownloadProgress = null, loadAll = true }) {
@@ -803,8 +838,10 @@ export const storeConfig:StoreOptions<MIQAStore> = {
 
       if (loadAll) {
         const oldScan = getters.currentScan;
+        // frame.scan returns the scan id
         const newScan = state.scans[frame.scan];
 
+        // Queue the new scan to be loaded
         if (newScan !== oldScan && newScan) {
           queueLoadScan(newScan, 3);
         }
@@ -867,6 +904,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       // check for window lock expiry
       if (loadAll && state.windowLocked.lock) {
         const { currentViewData } = getters;
+        // Handles unlocking if necessary
         const unlock = () => {
           commit('SET_WINDOW_LOCKED', {
             lock: false,
