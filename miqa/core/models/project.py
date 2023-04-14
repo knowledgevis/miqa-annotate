@@ -13,6 +13,7 @@ from miqa.core.models.scan import SCAN_TYPES, Scan
 from miqa.core.models.scan_decision import ScanDecision, ArtifactState
 from miqa.core.models.setting import Setting
 
+
 def default_evaluation_model_mapping():
     # NEXT:
     # model_mapping = Setting.objects.filter(group__key__exact='Default Evaluation Model Mapping')
@@ -72,9 +73,7 @@ class Project(TimeStampedModel, models.Model):
     predictions_group = models.ForeignKey('Setting', null=True, blank=True,
                                           on_delete=models.SET_NULL,
                                           related_name="predictions_group",
-                                         limit_choices_to={'type': 'GEMPT'})
-
-
+                                          limit_choices_to={'type': 'GEMPT'})
 
     @property
     def artifacts(self) -> dict:
@@ -89,12 +88,12 @@ class Project(TimeStampedModel, models.Model):
         else:
             return {}
 
-
     @property
     def model_source_type_mappings(self) -> dict:
         """Gets the list of file type to model mappings associated with the project"""
         if self.files_to_models_group:
-            model_source_type_mappings = Setting.objects.filter(group__id=self.files_to_models_group_id)
+            model_source_type_mappings = Setting.objects.filter(
+                group__id=self.files_to_models_group_id)
             this_model_source_type_mapping = {
                 model_source_type_mapping.key: model_source_type_mapping.value
                 for model_source_type_mapping in model_source_type_mappings

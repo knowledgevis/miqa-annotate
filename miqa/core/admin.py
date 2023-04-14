@@ -53,6 +53,7 @@ class ProjectAdmin(GuardedModelAdmin):
     list_filter = ('created', 'modified', 'creator')
     search_fields = ('name',)
 
+
 @admin.register(Setting)
 class SettingAdmin(admin.ModelAdmin):
     list_display = ('key', 'value', 'type', 'group', 'is_type')

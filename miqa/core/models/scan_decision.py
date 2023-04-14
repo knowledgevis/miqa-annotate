@@ -24,6 +24,7 @@ class ArtifactState(Enum):
     ABSENT = 0
     UNDEFINED = -1
 
+
 class ScanDecision(models.Model):
     class Meta:
         ordering = ['-created']
