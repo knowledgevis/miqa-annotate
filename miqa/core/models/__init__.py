@@ -5,6 +5,7 @@ from .global_settings import GlobalSettings
 from .project import Project
 from .scan import Scan
 from .scan_decision import ScanDecision
+from .setting import Setting
 
 __all__ = [
     'Evaluation',
@@ -14,4 +15,5 @@ __all__ = [
     'Project',
     'Scan',
     'ScanDecision',
+    'Setting',
 ]

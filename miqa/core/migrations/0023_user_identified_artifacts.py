@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             model_name='scandecision',
             name='user_identified_artifacts',
             field=models.JSONField(
-                default=miqa.core.models.scan_decision.default_identified_artifacts
+                default=dict
             ),
         ),
     ]

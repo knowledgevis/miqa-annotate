@@ -1,0 +1,970 @@
+[
+  {
+    "model": "core.setting",
+    "pk": "02ca0e98-bd4a-4600-b648-4e46b3d84b49",
+    "fields": {
+      "key": "U",
+      "value": "Usable",
+      "type": "DCT",
+      "group": "8be09e75-51b0-4e47-a195-4028c24a4f9f",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "03e0ff41-dd73-493c-a3ae-3358d3edd487",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "flow_artifact",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "056b2f35-1dd4-4de1-bd80-6ce2d81dc0b2",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "miqaMix-val0.pth",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "05718136-8c6d-4b2e-a29b-c6c08d36d035",
+    "fields": {
+      "key": "Q?",
+      "value": "Questionable",
+      "type": "DCT",
+      "group": "8be09e75-51b0-4e47-a195-4028c24a4f9f",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "0a878794-d81c-4ae3-9d7a-60db04e2bc97",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "miqaT1-val0.pth",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "0af79e4a-cf31-4a56-8e00-a2e205271571",
+    "fields": {
+      "key": "T1",
+      "value": "T1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "0b1feb5e-9d80-41dc-88ba-2eed5c01acf7",
+    "fields": {
+      "key": "T2",
+      "value": "T2",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "0d1a2387-bfbf-4557-9357-a54ed7742d34",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "flow_artifact",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "0f26a1a6-9a93-438c-9f0f-e69edb764535",
+    "fields": {
+      "key": "PD",
+      "value": "PD",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "11e0baca-b487-4bba-9953-3890db8a4376",
+    "fields": {
+      "key": "Default Evaluation Model Predictions Group",
+      "value": "",
+      "type": "GEMPT",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "15b75710-8582-4f36-b959-ac7745ede9fa",
+    "fields": {
+      "key": "Lung Artifact 3",
+      "value": "",
+      "type": "AT",
+      "group": "8aba1f29-74c5-4f94-9aa0-5bfa8e76466e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "1aa2dcb9-e4e4-41c4-95ff-926b039ccee0",
+    "fields": {
+      "key": "ncanda-t1spgr-v1",
+      "value": "ncanda-t1spgr-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+    "fields": {
+      "key": "Default Evaluation Models Group",
+      "value": "",
+      "type": "GEMT",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "21433708-3e13-4194-a052-cada0606865c",
+    "fields": {
+      "key": "flow_artifact",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "2696a0a4-bfd3-48e2-aeca-1aa40c4c8ce0",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "full_brain_coverage",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "2a5a4863-3491-4896-9d6a-79030e6d4301",
+    "fields": {
+      "key": "MRA",
+      "value": "MRA",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "2a93ab34-e342-470c-9681-5099bb9fa71c",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "lesions",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "33143d1d-29cf-4bde-abe3-06c2b6698b0b",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "ghosting_motion",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "33f92fd1-8325-49e9-b5d0-a550a25202ce",
+    "fields": {
+      "key": "PD",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "3707ca81-b793-443a-9e66-10aaa2a925d6",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "contrast_to_noise_ratio",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "3d015ded-edf6-4804-b04a-2001c4f581b9",
+    "fields": {
+      "key": "UN",
+      "value": "Unusable",
+      "type": "DCT",
+      "group": "baae4031-08e8-4c7a-b9f6-9d8f45a2ebe7",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "40f22863-54a8-4df6-8b64-8ea38e0d8039",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "misalignment",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "42694c48-8f3d-4133-bdf1-6110c5e6b030",
+    "fields": {
+      "key": "swap_wraparound",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "44cfa8d4-46c9-4a7c-b830-b842d5cba668",
+    "fields": {
+      "key": "LPS",
+      "value": "LPS",
+      "type": "AOT",
+      "group": "8be09e75-51b0-4e47-a195-4028c24a4f9f",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "48019717-68d2-46ed-ac26-c751f1f1ada9",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "swap_wraparound",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "49a03f26-2331-49b1-be9b-97c0bfe5bd6e",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "",
+      "type": "EMT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "4b0115cd-986b-4d4e-a36a-22e2edfdb535",
+    "fields": {
+      "key": "UE",
+      "value": "Usable-Extra",
+      "type": "DCT",
+      "group": "baae4031-08e8-4c7a-b9f6-9d8f45a2ebe7",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "4feb019a-79db-46d7-9324-e964762be05d",
+    "fields": {
+      "key": "T2",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "591a6ddd-1d99-49b2-9134-a3b32aee3bd6",
+    "fields": {
+      "key": "RAS",
+      "value": "RAS",
+      "type": "AOT",
+      "group": "8be09e75-51b0-4e47-a195-4028c24a4f9f",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "5cae622c-ba1e-4c28-af77-64006932f231",
+    "fields": {
+      "key": "ghosting_motion",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "5de0e4dd-c87f-46ee-879d-5edab0ccc941",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "susceptibility_metal",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "5e3cbcb7-4c20-44c7-8a4e-e15d72ec09c2",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "signal_to_noise_ratio",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "5e54610d-51e1-402e-a5f3-36a675a3a392",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "",
+      "type": "EMT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "6293f1fd-20dd-4137-9eef-4f6922ac892d",
+    "fields": {
+      "key": "ncanda-dti6b500pepolar-v1",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "6429e16e-3b7b-4db8-8c74-f3a582c32efa",
+    "fields": {
+      "key": "normal_variants",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "64f0b189-c2c3-4a4d-b806-fabec4034fd9",
+    "fields": {
+      "key": "PET",
+      "value": "PET",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "6525e740-a359-486e-a121-17d4a4d2f080",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "ghosting_motion",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "6a34c7b8-fc8b-4c81-9084-1af756b8dd91",
+    "fields": {
+      "key": "ncanda-dti60b1000-v1",
+      "value": "MIQAT1-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "6ab451d8-4690-43d7-88cc-9c08ad8c6584",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "truncation_artifact",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "6db8be6f-1115-47a3-b3a5-f9f603e8d766",
+    "fields": {
+      "key": "susceptibility_metal",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "74860ec2-6278-4b06-aaa0-57da920dff73",
+    "fields": {
+      "key": "ncanda-mprage-v1",
+      "value": "ncanda-mprage-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "768facd9-cd24-4f6b-91b4-4e0f3cc8a8a9",
+    "fields": {
+      "key": "ncanda-dti30b400-v1",
+      "value": "MIQAT1-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "7756b0c4-96e0-4af8-8d1e-0e5a558cf740",
+    "fields": {
+      "key": "ncanda-dti6b500pepolar-v1",
+      "value": "ncanda-dti6b500pepolar-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "78df0f86-4bfd-4b85-84bd-4e4904284a38",
+    "fields": {
+      "key": "ncanda-dti30b400-v1",
+      "value": "ncanda-dti30b400-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "7e4eca42-3c84-4fe7-ad8c-4db2b8cbbcf6",
+    "fields": {
+      "key": "ncanda-t2fse-v1",
+      "value": "ncanda-t2fse-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "806ab024-cf04-4910-a0a5-522c8efdc144",
+    "fields": {
+      "key": "inhomogeneity",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "81188955-a357-43c4-8772-3e31b9fd1248",
+    "fields": {
+      "key": "lesions",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "8822ca50-1245-4130-b98d-dded9ca2859f",
+    "fields": {
+      "key": "Lung Artifact 1",
+      "value": "",
+      "type": "AT",
+      "group": "8aba1f29-74c5-4f94-9aa0-5bfa8e76466e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "8aba1f29-74c5-4f94-9aa0-5bfa8e76466e",
+    "fields": {
+      "key": "Lung Artifacts Group",
+      "value": "",
+      "type": "GAT",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "8b05b100-fb98-4004-b2ae-dd29f000cd2e",
+    "fields": {
+      "key": "ncanda-t2fse-v1",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "8be09e75-51b0-4e47-a195-4028c24a4f9f",
+    "fields": {
+      "key": "Default Anatomy Orientations Group",
+      "value": "",
+      "type": "GAOT",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "8f886246-a108-4881-a769-56dcf8b3a553",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "overall_quality",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "8fd6615b-0368-4df9-9e23-e1ddaa7baf3c",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "truncation_artifact",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "927f2929-0daa-4738-93ed-9589b1974d29",
+    "fields": {
+      "key": "ncanda-dti60b1000-v1",
+      "value": "ncanda-dti60b1000-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "a25ed49f-9c54-488d-8e32-facda7177dee",
+    "fields": {
+      "key": "FMRI",
+      "value": "FMRI",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "a43741a5-67f9-4e1d-b598-c2f53f51b0cd",
+    "fields": {
+      "key": "DTI",
+      "value": "DTI",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "a4ae068f-8a33-4a9e-91bf-fd05e6e259ee",
+    "fields": {
+      "key": "Lung Artifact 2",
+      "value": "",
+      "type": "AT",
+      "group": "8aba1f29-74c5-4f94-9aa0-5bfa8e76466e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+    "fields": {
+      "key": "Default Scan Types Group",
+      "value": "",
+      "type": "GST",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "aeadf00b-e783-4df3-825d-aa4910308330",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "lesions",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "af618180-4a24-47a8-b03c-70824a1a13b1",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "contrast_to_noise_ratio",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "b32f9ad7-768e-4a19-baa4-815fe38b2596",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "full_brain_coverage",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "b80240f3-40b4-44fb-a00b-dcc2422fedc2",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "normal_variants",
+      "type": "EMPT",
+      "group": "200637e3-07d5-46fd-9926-dd987e47e0fa",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "baae4031-08e8-4c7a-b9f6-9d8f45a2ebe7",
+    "fields": {
+      "key": "Default Decision Choices Group",
+      "value": "",
+      "type": "GDCT",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "be7d10b1-5f9d-42ef-bfbf-4b0fc6198f58",
+    "fields": {
+      "key": "T1",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "bf7465c6-4fff-403e-acb9-6d902290d291",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "inhomogeneity",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "bfd6c74d-1cda-4e7d-a546-676ce629a9e4",
+    "fields": {
+      "key": "misalignment",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+    "fields": {
+      "key": "Default Evaluation File to Model Mappings Group",
+      "value": "",
+      "type": "GEFMMT",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "c1876d55-381d-4d0c-9cc0-ab1c058e2677",
+    "fields": {
+      "key": "full_brain_coverage",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "c87d25fc-fba4-42b3-ab50-333b0b538768",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "swap_wraparound",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "c8bdd419-c28a-43b8-ab0c-a4d771fb8e2a",
+    "fields": {
+      "key": "ncanda-rsfmri-v1",
+      "value": "ncanda-rsfmri-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "cbee94dd-1e81-4831-8073-238007a18301",
+    "fields": {
+      "key": "MRA",
+      "value": "MIQAT1-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "d0686d16-0dfc-47d8-b2c3-7a5fa096dd71",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "inhomogeneity",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "d1195fcd-4ea7-4839-bfb6-a4b65df06444",
+    "fields": {
+      "key": "DWI",
+      "value": "DWI",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "dca53ffe-09f5-4833-a6cc-f448733048c9",
+    "fields": {
+      "key": "ncanda-grefieldmap-v1",
+      "value": "ncanda-grefieldmap-v1",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "dd1ae9d9-1c4a-444a-9e19-c5349ec2ec76",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "overall_quality",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "de5b9b60-e847-4147-8b0c-20bf1804b8d0",
+    "fields": {
+      "key": "truncation_artifact",
+      "value": "",
+      "type": "AT",
+      "group": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "df871edd-b3ff-44af-a26e-cd66ffc360fe",
+    "fields": {
+      "key": "ncanda-rsfmri-v1",
+      "value": "MIQAT1-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "e5bbbf68-736e-4f4f-ad5d-4838423d418a",
+    "fields": {
+      "key": "MIQAMix-0",
+      "value": "normal_variants",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "e6e6dbde-8edf-4385-9ca7-3898b46c1668",
+    "fields": {
+      "key": "DWI",
+      "value": "MIQAT1-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "e9dea8dc-2bf1-4640-9666-cceeba07ba9c",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "misalignment",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "ec995b15-af9d-4f80-8223-02ec862d37e4",
+    "fields": {
+      "key": "Default Artifacts Group",
+      "value": "",
+      "type": "GAT",
+      "group": null,
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "efe4b8d2-cd3d-413b-9af9-5ece068e2010",
+    "fields": {
+      "key": "ncanda-t1spgr-v1",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "f15994a8-002e-444f-8ea0-0f30803ef373",
+    "fields": {
+      "key": "CT",
+      "value": "CT",
+      "type": "ST",
+      "group": "a81af095-29e1-4e47-a11a-33bcb72d1e9d",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "f6672042-5742-462f-9c8c-6ef87a3b3d00",
+    "fields": {
+      "key": "MIQAT1-0",
+      "value": "signal_to_noise_ratio",
+      "type": "EMPT",
+      "group": "11e0baca-b487-4bba-9953-3890db8a4376",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "f6e81cd8-84ea-4fbc-903a-db9cd7697fc7",
+    "fields": {
+      "key": "ncanda-mprage-v1",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "f9c7510d-5667-4288-b51d-0629a4f9face",
+    "fields": {
+      "key": "DTI",
+      "value": "MIQAT1-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "ffa0f751-3c62-4be5-bf23-aac62aae8c39",
+    "fields": {
+      "key": "FMRI",
+      "value": "MIQAT1-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  },
+  {
+    "model": "core.setting",
+    "pk": "ffc00e3b-6d6d-4aa3-84e6-135366c88025",
+    "fields": {
+      "key": "ncanda-grefieldmap-v1",
+      "value": "MIQAMix-0",
+      "type": "EFMMT",
+      "group": "c0e105ea-847e-4de3-b76f-72ec1083be5e",
+      "is_type": false
+    }
+  }
+]

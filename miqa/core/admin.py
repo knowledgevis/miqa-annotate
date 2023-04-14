@@ -2,7 +2,7 @@
 from django.contrib import admin
 from guardian.admin import GuardedModelAdmin
 
-from .models import Evaluation, Experiment, Frame, Project, Scan, ScanDecision
+from .models import Evaluation, Experiment, Frame, Project, Scan, ScanDecision, Setting
 
 
 @admin.register(Experiment)
@@ -52,3 +52,9 @@ class ProjectAdmin(GuardedModelAdmin):
     )
     list_filter = ('created', 'modified', 'creator')
     search_fields = ('name',)
+
+@admin.register(Setting)
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ('key', 'value', 'type', 'group', 'is_type')
+    list_filter = ('type', 'group', 'is_type')
+    list_editable = ('type', 'group', 'is_type')

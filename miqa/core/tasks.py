@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 from typing import Dict, List, Optional
+import logging
 
 import boto3
 from botocore import UNSIGNED
@@ -14,6 +15,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 import pandas
 from rest_framework.exceptions import APIException
+from miqa.learning.evaluation_models import NNModel
 
 from miqa.core.conversion.import_export_csvs import (
     import_dataframe_to_dict,
@@ -31,7 +33,7 @@ from miqa.core.models import (
     ScanDecision,
 )
 from miqa.core.models.frame import StorageMode
-from miqa.core.models.scan_decision import DECISION_CHOICES, default_identified_artifacts
+from miqa.core.models.scan_decision import DECISION_CHOICES
 
 
 def _get_s3_client(public: bool):
@@ -61,13 +63,28 @@ def reset_demo():
 
 @shared_task
 def evaluate_frame_content(frame_id):
-    from miqa.learning.evaluation_models import available_evaluation_models
     from miqa.learning.nn_inference import evaluate1
 
+    logging.debug(f'Frame Id: {frame_id}')
     frame = Frame.objects.get(id=frame_id)
-    eval_model_name = frame.scan.experiment.project.evaluation_models[[frame.scan.scan_type][0]]
+    logging.debug(f'Frame: {frame}')
+    # Get the model that matches the frame's file type
+    logging.debug(f'Eval Model Type Mappings: {frame.scan.experiment.project.model_source_type_mappings}')
+    eval_model_name = frame.scan.experiment.project.model_source_type_mappings[frame.scan.scan_type]
+    logging.debug(f'Eval Model Name: {eval_model_name}')
+    # Get the PyTorch model file name
+    eval_model_file = frame.scan.experiment.project.model_mappings[eval_model_name]
+    logging.debug(f'Eval Model File: {eval_model_file}')
+    # Get the Predictions associated with the model
+    eval_model_predictions = [
+        prediction_mapping
+        for prediction_mapping in frame.scan.experiment.project.model_predictions[eval_model_name]
+    ]
+    logging.debug(f'All Eval Model Predictions: {eval_model_predictions}')
+    eval_model_nn = NNModel(eval_model_file, eval_model_predictions)
+
     s3_public = frame.scan.experiment.project.s3_public
-    eval_model = available_evaluation_models[eval_model_name].load()
+    eval_model = eval_model_nn.load()
     with tempfile.TemporaryDirectory() as tmpdirname:
         # need to send a local version to NN
         if frame.storage_mode == StorageMode.LOCAL_PATH:
@@ -90,7 +107,6 @@ def evaluate_frame_content(frame_id):
 
 @shared_task
 def evaluate_data(frames_by_project):
-    from miqa.learning.evaluation_models import available_evaluation_models
     from miqa.learning.nn_inference import evaluate_many
 
     model_to_frames_map = {}
@@ -100,7 +116,9 @@ def evaluate_data(frames_by_project):
             frame = Frame.objects.get(id=frame_id)
             file_path = frame.raw_path
             if frame.storage_mode == StorageMode.S3_PATH or Path(file_path).exists():
-                eval_model_name = project.evaluation_models[[frame.scan.scan_type][0]]
+                # Get the model that matches the frame's file type
+                logging.warning(f'Eval Model Type Mappings: {project.model_source_type_mappings}')
+                eval_model_name = project.model_source_type_mappings[frame.scan.scan_type]
                 if eval_model_name not in model_to_frames_map:
                     model_to_frames_map[eval_model_name] = []
                 model_to_frames_map[eval_model_name].append(frame)
@@ -108,7 +126,16 @@ def evaluate_data(frames_by_project):
     with tempfile.TemporaryDirectory() as tmpdirname:
         tmpdir = Path(tmpdirname)
         for model_name, frame_set in model_to_frames_map.items():
-            current_model = available_evaluation_models[model_name].load()
+            # Get the PyTorch model file name
+            eval_model_file = project.model_mappings[model_name]
+            # Get the predictions associated with the model
+            eval_model_predictions = [
+                prediction_mapping
+                for prediction_mapping in project.model_predictions[model_name]
+            ]
+            # Load the appropriate NNModel
+            eval_model_nn = NNModel(eval_model_file, eval_model_predictions)
+            current_model = eval_model_nn.load()
             file_paths = {frame: frame.raw_path for frame in frame_set}
             for frame, file_path in file_paths.items():
                 if frame.storage_mode == StorageMode.S3_PATH:
@@ -132,6 +159,7 @@ def evaluate_data(frames_by_project):
 
 
 def import_data(project_id: Optional[str]):
+    # Global vs Project Import
     if project_id is None:
         project = None
         import_path = GlobalSettings.load().import_path
@@ -141,6 +169,7 @@ def import_data(project_id: Optional[str]):
         import_path = project.import_path
         s3_public = project.s3_public
 
+    # Import CSV or JSON Files from Server / S3
     try:
         if import_path.endswith('.csv'):
             if import_path.startswith('s3://'):
@@ -179,16 +208,18 @@ def perform_import(import_dict):
     new_scan_decisions: List[ScanDecision] = []
 
     for project_name, project_data in import_dict['projects'].items():
+        # Check if project exists
         try:
             project_object = Project.objects.get(name=project_name)
         except Project.DoesNotExist:
             raise APIException(f'Project {project_name} does not exist.')
 
-        # delete old imports of these projects
+        # Delete old imports of these projects
         Experiment.objects.filter(
             project=project_object
         ).delete()  # cascades to scans -> frames, scan_notes
 
+        # Create Experiments
         for experiment_name, experiment_data in project_data['experiments'].items():
             notes = experiment_data.get('notes', '')
             experiment_object = Experiment(
@@ -198,6 +229,7 @@ def perform_import(import_dict):
             )
             new_experiments.append(experiment_object)
 
+            # Create Scans
             for scan_name, scan_data in experiment_data['scans'].items():
                 subject_id = scan_data.get('subject_id', None)
                 session_id = scan_data.get('session_id', None)
@@ -210,6 +242,7 @@ def perform_import(import_dict):
                     session_id=session_id,
                     scan_link=scan_link,
                 )
+                # Create ScanDecisions for Scans
                 if 'last_decision' in scan_data and scan_data['last_decision']:
                     scan_data['decisions'] = [scan_data['last_decision']]
                 for decision_data in scan_data.get('decisions', []):
@@ -251,13 +284,14 @@ def perform_import(import_dict):
                                     and artifact_name in decision_data['user_identified_artifacts']
                                     else 0
                                 )
-                                for artifact_name in default_identified_artifacts().keys()
+                                for artifact_name in project_object.artifacts
                             },
                             location=location,
                             scan=scan_object,
                         )
                         new_scan_decisions.append(decision)
                 new_scans.append(scan_object)
+                # Create Frames
                 for frame_number, frame_data in scan_data['frames'].items():
                     if frame_data['file_location']:
                         frame_object = Frame(
@@ -269,26 +303,27 @@ def perform_import(import_dict):
                         if settings.ZARR_SUPPORT and Path(frame_object.raw_path).exists():
                             nifti_to_zarr_ngff.delay(frame_data['file_location'])
 
-    # if any scan has no frames, it should not be created
+    # If any scan has no frames, it should not be created
     new_scans = [
         new_scan
         for new_scan in new_scans
         if any(new_frame.scan == new_scan for new_frame in new_frames)
     ]
-    # if any experiment has no scans, it should not be created
+    # If any experiment has no scans, it should not be created
     new_experiments = [
         new_experiment
         for new_experiment in new_experiments
         if any(new_scan.experiment == new_experiment for new_scan in new_scans)
     ]
 
+    # Bulk create Project and it's children
     Project.objects.bulk_create(new_projects)
     Experiment.objects.bulk_create(new_experiments)
     Scan.objects.bulk_create(new_scans)
     Frame.objects.bulk_create(new_frames)
     ScanDecision.objects.bulk_create(new_scan_decisions)
 
-    # must use str, not UUID, to get sent to celery task properly
+    # Must use str, not UUID, to get sent to celery task properly
     frames_by_project: Dict[str, List[str]] = {}
     for frame in new_frames:
         project_id = str(frame.scan.experiment.project.id)
