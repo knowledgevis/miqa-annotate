@@ -1,5 +1,5 @@
-from uuid import uuid4
 import logging
+from uuid import uuid4
 
 from django.apps import apps
 from django.contrib.auth.models import User
@@ -10,7 +10,7 @@ from django_extensions.db.models import TimeStampedModel
 from guardian.shortcuts import assign_perm, get_perms, get_users_with_perms, remove_perm
 
 from miqa.core.models.scan import SCAN_TYPES, Scan
-from miqa.core.models.scan_decision import ScanDecision, ArtifactState
+from miqa.core.models.scan_decision import ArtifactState, ScanDecision
 from miqa.core.models.setting import Setting
 
 

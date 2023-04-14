@@ -1,10 +1,10 @@
 from datetime import datetime
 from io import BytesIO, StringIO
 import json
+import logging
 from pathlib import Path
 import tempfile
 from typing import Dict, List, Optional
-import logging
 
 import boto3
 from botocore import UNSIGNED
@@ -15,7 +15,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 import pandas
 from rest_framework.exceptions import APIException
-from miqa.learning.evaluation_models import NNModel
 
 from miqa.core.conversion.import_export_csvs import (
     import_dataframe_to_dict,
@@ -34,6 +33,7 @@ from miqa.core.models import (
 )
 from miqa.core.models.frame import StorageMode
 from miqa.core.models.scan_decision import DECISION_CHOICES
+from miqa.learning.evaluation_models import NNModel
 
 
 def _get_s3_client(public: bool):
