@@ -76,6 +76,7 @@ export default defineComponent({
     },
   },
   watch: {
+    // Update locked experiment when experiment changes
     experimentId(newValue, oldValue) {
       this.switchLock(newValue, oldValue);
       clearInterval(this.lockCycle);
@@ -86,7 +87,10 @@ export default defineComponent({
   },
   mounted() {
     if (!this.navigateToNextIfCurrentScanNull()) {
+      // Switch the lock to the current experiment
       this.switchLock(this.experimentId);
+
+      // Handle key presses
       window.addEventListener('keydown', (event) => {
         const activeElement = document.activeElement as HTMLElement;
         if (['textarea', 'input'].includes(activeElement.tagName.toLowerCase())) return;
@@ -103,6 +107,7 @@ export default defineComponent({
     }
   },
   beforeDestroy() {
+    // Remove lock
     this.setLock({ experimentId: this.experimentId, lock: false });
     clearInterval(this.lockCycle);
   },

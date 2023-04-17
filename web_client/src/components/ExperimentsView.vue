@@ -62,6 +62,7 @@ export default {
     showUploadModal() {
       this.delayPrepareDropZone();
     },
+    // When the project changes, reset the local state for the project.
     currentProject() {
       this.showUploadModal = false;
       this.uploadToExisting = false;
@@ -98,12 +99,14 @@ export default {
       }
       return str;
     },
+    /** Get the URL of the first frame in the current scan */
     getURLForScan(scanId) {
       return `/${this.currentProject.id}/${scanId}`;
     },
+    /** Assigns a color and character if a decision has been rendered on a given scan */
     decisionToRating(decisions) {
       if (decisions.length === 0) return {};
-      const rating = _.last(_.sortBy(decisions, (dec) => dec.created)).decision;
+      const rating = _.first(_.sortBy(decisions, (decision) => decision.created)).decision;
       let color = 'grey--text';
       if (rating === 'U') {
         color = 'green--text';
@@ -123,12 +126,13 @@ export default {
       return '';
     },
     scanState(scan) {
-      let state;
+      let scanTaskState;
       if (this.currentTaskOverview) {
-        state = this.currentTaskOverview.scan_states[scan.id];
+        scanTaskState = this.currentTaskOverview.scan_states[scan.id];
       }
-      return state || 'unreviewed';
+      return scanTaskState || 'unreviewed';
     },
+    /** Adds a class to a scan representative of the scan's task state. */
     scanStateClass(scan) {
       let classes = `body-1 state-${this.scanState(scan).replace(/ /g, '-')}`;
       if (scan === this.currentScan) {
@@ -139,6 +143,7 @@ export default {
     delayPrepareDropZone() {
       setTimeout(this.prepareDropZone, 500);
     },
+    /** Listens for images being dragged into the dropzone */
     prepareDropZone() {
       const dropZone = document.getElementById('dropZone');
       if (dropZone) {
@@ -152,6 +157,7 @@ export default {
         });
       }
     },
+    /** Gets files dropped into the dropzone */
     addDropFiles(e) {
       this.fileSetForUpload = [...e.dataTransfer.files];
     },
