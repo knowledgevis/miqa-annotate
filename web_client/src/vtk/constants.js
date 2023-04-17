@@ -1,3 +1,13 @@
+export const ANNOTATIONS = {
+  /* eslint-disable-next-line no-template-curly-in-string */
+  s: 'Image&nbsp;size:&nbsp;${sliceWidth}&nbsp;x&nbsp;${sliceHeight}',
+  nw:
+    /* eslint-disable-next-line no-template-curly-in-string */
+    'Origin:&nbsp;${sliceOrigin}<br>Spacing:&nbsp;${sliceSpacing}&nbsp;mm<br>${sliceIndex}&nbsp;of&nbsp;${sliceCount}',
+  /* eslint-disable-next-line no-template-curly-in-string */
+  se: 'WL:&nbsp;${windowLevel}&nbsp;/&nbsp;WW:&nbsp;${windowWidth}',
+};
+
 export const VIEW_ORIENTATIONS = {
   LPS: {
     default: {

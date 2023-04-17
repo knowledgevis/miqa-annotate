@@ -262,7 +262,7 @@ export default {
       const dataURL = await this.view.captureImage();
 
       const imageOutput = await (
-        async (file) : Promise<HTMLImageElement> => new Promise((resolve) => {
+        async (file) : Promise<HTMLImageElement> => new Promise<HTMLImageElement>((resolve) => {
           const img = new Image();
           img.onload = () => {
             resolve(img);
