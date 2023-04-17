@@ -615,6 +615,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     [SET_ERROR_LOADING_FRAME](state, isErrorLoading: boolean) {
       state.errorLoadingFrame = isErrorLoading;
     },
+    /** Adds a scanId and it's corresponding scanFrames state */
     [ADD_SCAN_FRAMES](state, { sid: scanId, id: frameId }) {
       state.scanFrames[scanId].push(frameId);
     },
@@ -623,15 +624,15 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       state.experimentScans[experimentId].push(scanId);
     },
     /**
-     * Add an experiment to state.experiments, it's id to state.experimentIds, and
-     * set state.experimentScans to an empty array
+     * Add an experiment to experiments state, it's id to experimentIds state, and
+     * set experimentScans state to an empty array
      */
-    [ADD_EXPERIMENT](state, { id, value }) {
-      state.experimentScans[id] = [];
-      if (!state.experimentIds.includes(id)) {
-        state.experimentIds.push(id);
+    [ADD_EXPERIMENT](state, { id: experimentId, value: experiment }) {
+      state.experimentScans[experimentId] = [];
+      if (!state.experimentIds.includes(experimentId)) {
+        state.experimentIds.push(experimentId);
       }
-      state.experiments[id] = value;
+      state.experiments[experimentId] = experiment;
     },
     [UPDATE_EXPERIMENT](state, experiment) {
       // Necessary for reactivity
@@ -660,12 +661,6 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     [SET_CURRENT_VTK_INDEX_SLICES](state, { indexAxis, value }) {
       state[`${indexAxis}IndexSlice`] = value;
       state.sliceLocation = undefined;
-    },
-    setCurrentWindowWidth(state, value) {
-      state.currentWindowWidth = value;
-    },
-    setCurrentWindowLevel(state, value) {
-      state.currentWindowLevel = value;
     },
     [SET_SHOW_CROSSHAIRS](state, show) {
       state.showCrosshairs = show;
