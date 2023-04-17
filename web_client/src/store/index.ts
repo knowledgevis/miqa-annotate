@@ -37,6 +37,7 @@ Vue.use(Vuex);
 
 // Cache of downloaded files
 const fileCache = new Map();
+// Cache of individual frames within a single scan
 const frameCache = new Map();
 // Queue of frames to be downloaded
 let readDataQueue = [];
@@ -81,13 +82,13 @@ function prepareProxyManager(proxyManager: vtkProxyManager) {
 }
 
 /** Array name is file name minus last extension, e.g. image.nii.gz => image.nii */
-function getArrayName(filename) {
+function getArrayNameFromFilename(filename) {
   const idx = filename.lastIndexOf('.');
   const name = idx > -1 ? filename.substring(0, idx) : filename;
   return `Scalars ${name}`;
 }
 
-function getData(id, file, webWorker = null) {
+function getImageData(id, file, webWorker = null) {
   return new Promise((resolve, reject) => {
     if (frameCache.has(id)) {
       resolve({ frameData: frameCache.get(id), webWorker });
@@ -99,7 +100,7 @@ function getData(id, file, webWorker = null) {
         readImageArrayBuffer(webWorker, io.result, fileName)
           .then(({ webWorker, image }) => { // eslint-disable-line no-shadow
             const frameData = convertItkToVtkImage(image, {
-              scalarArrayName: getArrayName(fileName),
+              scalarArrayName: getArrayNameFromFilename(fileName),
             });
             const dataRange = frameData
               .getPointData()
@@ -146,7 +147,7 @@ function loadFile(frame, { onDownloadProgress = null } = {}) {
 /** Gets the data from the selected image file using a webWorker. */
 function loadFileAndGetData(frame, { onDownloadProgress = null } = {}) {
   const loadResult = loadFile(frame, { onDownloadProgress });
-  return loadResult.fileP.then((file) => getData(frame.id, file, savedWorker)
+  return loadResult.fileP.then((file) => getImageData(frame.id, file, savedWorker)
     .then(({ webWorker, frameData }) => {
       savedWorker = webWorker;
       return Promise.resolve({ frameData });
@@ -199,7 +200,7 @@ function poolFunction(webWorker, taskInfo) {
 
     filePromise
       .then((file) => {
-        resolve(getData(frame.id, file, webWorker));
+        resolve(getImageData(frame.id, file, webWorker));
       })
       .catch((err) => {
         reject(err);
