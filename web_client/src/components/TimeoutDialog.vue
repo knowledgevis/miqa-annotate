@@ -38,9 +38,9 @@ export default defineComponent({
 
     const lastApiRequestTime = computed(() => store.state.lastApiRequestTime);
 
-    const reset = async () => {
+    const continueSession = async () => {
       await djangoRest.restoreLogin(store);
-      djangoRest.projects();
+      await djangoRest.projects();
 
       // reset dialog
       show.value = false;
@@ -97,7 +97,7 @@ export default defineComponent({
       unauthorizedTriggered,
       timeRemaining,
       timeRemainingStr,
-      reset,
+      reset: continueSession,
       logout,
       sessionTimeout,
       idleTimeout,

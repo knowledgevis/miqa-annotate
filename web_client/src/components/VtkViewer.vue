@@ -42,6 +42,7 @@ export default {
       'currentScan',
       'currentViewData',
     ]),
+    // Returning representing from VTK
     representation() {
       return (
         // force add dependency on currentFrame
@@ -49,6 +50,7 @@ export default {
         && this.proxyManager.getRepresentation(null, this.view)
       );
     },
+    // Returns the range of valid values and their step for the slice property
     sliceDomain() {
       if (!this.representation) return null;
       return this.representation.getPropertyDomainByName('slice');
@@ -103,12 +105,14 @@ export default {
     kIndexSlice() {
       this.updateCrosshairs();
     },
+    // Only runs when changing scans
     view(view, oldView) {
       this.cleanup();
       oldView.setContainer(null);
       this.initializeSlice();
       this.initializeView();
     },
+    // Only runs when changing scans
     currentFrame(oldFrame, newFrame) {
       this.representation.setSlice(this.slice);
       this.applyCurrentWindowLevel();
@@ -133,7 +137,6 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'saveSlice',
       'SET_CURRENT_SCREENSHOT',
       'SET_CURRENT_VTK_INDEX_SLICES',
       'SET_SLICE_LOCATION',
