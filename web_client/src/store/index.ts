@@ -110,12 +110,12 @@ function getImageData(frameId: string, file, webWorker = null) {
             });
             // 7. Get metadata about image
             const dataRange = frameData
-              .getPointData()// From the image file
+              .getPointData() // From the image file
               .getArray(0) // Values in the file
-              .getRange(); // Range of viles in the file, e.g. [0, 3819]
+              .getRange(); // Range of values in the file, e.g. [0, 3819]
             frameCache.set(frameId, { frameData });
             // eslint-disable-next-line no-use-before-define
-            expandScanRange(frameId, dataRange);
+            expandScanRange(frameId, dataRange); // Example dataRange: [0, 3819]
             resolve({ frameData, webWorker });
           })
           .catch((error) => {
@@ -132,7 +132,7 @@ function getImageData(frameId: string, file, webWorker = null) {
 /** Load file, from cache if possible. */
 function loadFile(frame, { onDownloadProgress = null } = {}) {
   if (fileCache.has(frame.id)) {
-    return { frameId: frame.id, fileP: fileCache.get(frame.id) };
+    return { frameId: frame.id, cachedFile: fileCache.get(frame.id) };
   }
 
   // Otherwise download the frame
@@ -153,9 +153,9 @@ function loadFile(frame, { onDownloadProgress = null } = {}) {
 }
 
 /** Gets the data from the selected image file using a webWorker. */
-function loadFileAndGetData(frame, { onDownloadProgress = null } = {}) {
+async function loadFileAndGetData(frame, { onDownloadProgress = null } = {}) {
   const loadResult = loadFile(frame, { onDownloadProgress });
-  return loadResult.fileP.then((file) => getImageData(frame.id, file, savedWorker)
+  return loadResult.cachedFile.then((file) => getImageData(frame.id, file, savedWorker)
     .then(({ webWorker, frameData }) => {
       savedWorker = webWorker;
       return Promise.resolve({ frameData });
@@ -864,13 +864,13 @@ export const storeConfig:StoreOptions<MIQAStore> = {
           queueLoadScan(newScan, 3);
         }
         let newProxyManager = false;
+        // Create new proxyManager if scans are different, retain if same
         if (oldScan !== newScan && state.proxyManager) {
-          // If we don't "shrinkProxyManager()" and reinitialize it between
-          // scans, then we can end up with no frame
-          // slices displayed, even though we have the data and attempted
-          // to render it.  This may be due to frame extents changing between
-          // scans, which is not the case from one timestep of a single scan
-          // to tne next.
+          // If we don't shrink and reinitialize between scans
+          // we sometimes end up with no frame slices displayed.
+          // This may be due to the extents changing between scans,
+          // the extents do not change from one timestep to another
+          // in a single scan.
           shrinkProxyManager(state.proxyManager);
           newProxyManager = true;
         }
