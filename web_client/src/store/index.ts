@@ -88,27 +88,34 @@ function getArrayNameFromFilename(filename) {
   return `Scalars ${name}`;
 }
 
-function getImageData(id, file, webWorker = null) {
+function getImageData(frameId: string, file, webWorker = null) {
   return new Promise((resolve, reject) => {
-    if (frameCache.has(id)) {
-      resolve({ frameData: frameCache.get(id), webWorker });
+    // 1. Check cache for copy of image
+    if (frameCache.has(frameId)) {
+      // 2a. Load image from cache
+      resolve({ frameData: frameCache.get(frameId), webWorker });
     } else {
+      // 2b. Download image
       const fileName = file.name;
       const io = new FileReader();
 
+      // 4. Wait until the file has been loaded
       io.onload = function onLoad() {
+        // 5. Read image using ITK
         readImageArrayBuffer(webWorker, io.result, fileName)
+          // 6. Convert image from ITK to VTK
           .then(({ webWorker, image }) => { // eslint-disable-line no-shadow
             const frameData = convertItkToVtkImage(image, {
               scalarArrayName: getArrayNameFromFilename(fileName),
             });
+            // 7. Get metadata about image
             const dataRange = frameData
-              .getPointData()
-              .getArray(0)
-              .getRange();
-            frameCache.set(id, { frameData });
+              .getPointData()// From the image file
+              .getArray(0) // Values in the file
+              .getRange(); // Range of viles in the file, e.g. [0, 3819]
+            frameCache.set(frameId, { frameData });
             // eslint-disable-next-line no-use-before-define
-            expandScanRange(id, dataRange);
+            expandScanRange(frameId, dataRange);
             resolve({ frameData, webWorker });
           })
           .catch((error) => {
@@ -116,6 +123,7 @@ function getImageData(id, file, webWorker = null) {
           });
       };
 
+      // 3. Load image file
       io.readAsArrayBuffer(file);
     }
   });
@@ -224,11 +232,11 @@ function startReaderWorkerPool() {
     taskArgsArray,
     progressHandler,
   );
-  taskRunId = runId;
+  taskRunId = runId; // The number of tasks still running
 
   promise
     .then(() => {
-      taskRunId = -1;
+      taskRunId = -1; // Indicates no tasks are running
     })
     .catch((err) => {
       console.error(err);
