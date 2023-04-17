@@ -297,23 +297,23 @@ function queueLoadScan(scan, loadNext = 0) {
 }
 
 /** Get next frame in specific experiment/scan */
-function getNextFrame(experiments, i, j) {
-  const experiment = experiments[i];
+function getNextFrame(experiments, experimentIndex, scanIndex) {
+  const experiment = experiments[experimentIndex];
   const { scans } = experiment;
 
-  if (j === scans.length - 1) {
+  if (scanIndex === scans.length - 1) {
     // last scan, go to next experiment
-    if (i === experiments.length - 1) {
+    if (experimentIndex === experiments.length - 1) {
       // last experiment, nowhere to go
       return null;
     }
     // get first scan in next experiment
-    const nextExperiment = experiments[i + 1];
-    const nextScan = nextExperiment.scans[0];
-    return nextScan.frames[0];
+    const nextExperiment = experiments[experimentIndex + 1];
+    const nextScan = nextExperiment.scans[0]; // Get the first scan in the next experiment
+    return nextScan.frames[0]; // Get the first frame in the nextScan
   }
   // get next scan in current experiment
-  const nextScan = scans[j + 1];
+  const nextScan = scans[scanIndex + 1];
   return nextScan.frames[0];
 }
 
