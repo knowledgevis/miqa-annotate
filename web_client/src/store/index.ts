@@ -609,18 +609,18 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     [UPDATE_LAST_API_REQUEST_TIME](state) {
       state.lastApiRequestTime = Date.now();
     },
-    [SET_LOADING_FRAME](state, value) {
-      state.loadingFrame = value;
+    [SET_LOADING_FRAME](state, isLoading: boolean) {
+      state.loadingFrame = isLoading;
     },
-    [SET_ERROR_LOADING_FRAME](state, value) {
-      state.errorLoadingFrame = value;
+    [SET_ERROR_LOADING_FRAME](state, isErrorLoading: boolean) {
+      state.errorLoadingFrame = isErrorLoading;
     },
-    [ADD_SCAN_FRAMES](state, { sid, id }) {
-      state.scanFrames[sid].push(id);
+    [ADD_SCAN_FRAMES](state, { sid: scanId, id: frameId }) {
+      state.scanFrames[scanId].push(frameId);
     },
-    [ADD_EXPERIMENT_SCANS](state, { eid, sid }) {
-      state.scanFrames[sid] = [];
-      state.experimentScans[eid].push(sid);
+    [ADD_EXPERIMENT_SCANS](state, { eid: experimentId, sid: scanId }) {
+      state.scanFrames[scanId] = [];
+      state.experimentScans[experimentId].push(scanId);
     },
     /**
      * Add an experiment to state.experiments, it's id to state.experimentIds, and
