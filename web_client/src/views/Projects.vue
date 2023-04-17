@@ -25,7 +25,7 @@ export default defineComponent({
   },
   inject: ['user', 'MIQAConfig'],
   setup() {
-    const switchReviewMode = store.commit('SET_REVIEW_MODE');
+    const SET_REVIEW_MODE = store.commit('SET_REVIEW_MODE');
     const loadingProjects = ref(true);
     store.dispatch('loadProjects').then(() => {
       loadingProjects.value = false;
@@ -39,6 +39,7 @@ export default defineComponent({
     const selectedProjectIndex = ref(projects.value.findIndex(
       (project) => project.id === currentProject.value?.id,
     ));
+    // Loads global settings
     const selectGlobal = () => {
       store.dispatch('loadGlobal');
     };
@@ -81,6 +82,7 @@ export default defineComponent({
     async function refreshAllTaskOverviews() {
       projects.value.forEach(
         async (project: Project) => {
+          // Gets the latest projectTaskOverview for each project from the API
           const taskOverview = await djangoRest.projectTaskOverview(project.id);
           await store.commit('SET_TASK_OVERVIEW', taskOverview);
         },
@@ -105,7 +107,7 @@ export default defineComponent({
 
     return {
       reviewMode,
-      switchReviewMode,
+      SET_REVIEW_MODE,
       complete,
       currentProject,
       loadingProjects,
@@ -151,8 +153,8 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations([
-      'setProjects',
-      'setCurrentProject',
+      'SET_PROJECTS',
+      'SET_CURRENT_PROJECT',
     ]),
     selectProject(project: Project) {
       if (this.complete) {
@@ -164,8 +166,8 @@ export default defineComponent({
       if (this.creating && this.newName.length > 0) {
         try {
           const newProject = await djangoRest.createProject(this.newName);
-          this.setProjects(this.projects.concat([newProject]));
-          store.dispatch('loadProject', newProject);
+          this.SET_PROJECTS(this.projects.concat([newProject]));
+          await store.dispatch('loadProject', newProject);
           this.creating = false;
           this.newName = '';
 
@@ -389,7 +391,7 @@ export default defineComponent({
                 dense
                 style="display: inline-block; max-height: 40px; max-width: 60px;"
                 class="px-3 ma-0"
-                @change="switchReviewMode"
+                @change="SET_REVIEW_MODE"
               />
               <span>Scans for my review</span>
             </v-subheader>
