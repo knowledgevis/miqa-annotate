@@ -773,18 +773,18 @@ export const storeConfig:StoreOptions<MIQAStore> = {
 
           const nextScan = getNextFrame(experiments, experimentIndex, scanIndex);
 
-          for (let k = 0; k < frames.length; k += 1) {
-            const frame = frames[k];
-            commit('ADD_SCAN_FRAMES', { scanId: scan.id, id: frame.id });
+          for (let frameIndex = 0; frameIndex < frames.length; frameIndex += 1) {
+            const frame = frames[frameIndex];
+            commit('ADD_SCAN_FRAMES', { scanId: scan.id, frameId: frame.id });
             commit('SET_FRAME', {
               frameId: frame.id,
               frame: {
                 ...frame,
                 scan: scan.id,
                 experiment: experiment.id,
-                index: k,
-                previousFrame: k > 0 ? frames[k - 1].id : null,
-                nextFrame: k < frames.length - 1 ? frames[k + 1].id : null,
+                index: frameIndex,
+                previousFrame: frameIndex > 0 ? frames[frameIndex - 1].id : null,
+                nextFrame: frameIndex < frames.length - 1 ? frames[frameIndex + 1].id : null,
                 firstFrameInPreviousScan: firstInPrev,
                 firstFrameInNextScan: nextScan ? nextScan.id : null,
               },
