@@ -418,6 +418,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     lastApiRequestTime: Date.now(),
   },
   getters: {
+    /** Returns current view's project, experiments, scans, frames, auto-evaluation, etc. */
     currentViewData(state) {
       const currentFrame = state.currentFrameId ? state.frames[state.currentFrameId] : null;
       const scan = currentFrame ? state.scans[currentFrame.scan] : undefined;
@@ -472,6 +473,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     nextFrame(state, getters) {
       return getters.currentFrame ? getters.currentFrame.nextFrame : null;
     },
+    /** Gets the current scan using the currentFrame */
     currentScan(state, getters) {
       if (getters.currentFrame) {
         const curScanId = getters.currentFrame.scan;
@@ -479,6 +481,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       }
       return null;
     },
+    /** Gets the current experiment using the currentScan */
     currentExperiment(state, getters) {
       if (getters.currentScan) {
         const curExperimentId = getters.currentScan.experiment;
@@ -486,6 +489,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       }
       return null;
     },
+    /** Enumerates permissions of logged-in user */
     myCurrentProjectRoles(state) {
       const projectPerms = Object.entries(state.currentProjectPermissions)
         .filter((entry: [string, Array<User>]): boolean => entry[1].map(
@@ -497,6 +501,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       }
       return projectPerms;
     },
+    /** Returns true if no project has been selected */
     isGlobal(state) {
       return state.currentProject === null;
     },
@@ -527,6 +532,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     [SET_CURRENT_FRAME_ID](state, frameId) {
       state.currentFrameId = frameId;
     },
+    /** Sets a specified frame at a specific index in the frames array */
     [SET_FRAME](state, { frameId, frame }) {
       // Replace with a new object to trigger a Vuex update
       state.frames = { ...state.frames };
@@ -540,6 +546,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     [SET_RENDER_ORIENTATION](state, anatomy) {
       state.renderOrientation = anatomy;
     },
+    /** Also sets renderOrientation and currentProjectPermissions */
     [SET_CURRENT_PROJECT](state, project: Project | null) {
       state.currentProject = project;
       if (project) {
@@ -552,6 +559,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     },
     [SET_TASK_OVERVIEW](state, taskOverview: ProjectTaskOverview) {
       if (!taskOverview) return;
+      // Calculates total scans in project and scans that have been marked complete
       if (taskOverview.scan_states) {
         state.projects.find(
           (project) => project.id === taskOverview.project_id,
@@ -562,10 +570,15 @@ export const storeConfig:StoreOptions<MIQAStore> = {
           ).length,
         };
       }
+      // If we have a value in state.currentProject, and it's id is equal to taskOverview's
+      // project_id then:
       if (state.currentProject && taskOverview.project_id === state.currentProject.id) {
         state.currentTaskOverview = taskOverview;
+        // Iterate over allScans
         Object.values(store.state.scans).forEach((scan: Scan) => {
+          // If the scan exists and has been reviewed
           if (taskOverview.scan_states[scan.id] && taskOverview.scan_states[scan.id] !== 'unreviewed') {
+            // Reload the scan
             store.dispatch('reloadScan', scan.id);
           }
         });
@@ -574,13 +587,14 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     [SET_PROJECTS](state, projects: Project[]) {
       state.projects = projects;
     },
-    [ADD_SCAN_DECISION](state, { currentScan, newDecision }) {
-      state.scans[currentScan].decisions.push(newDecision);
+    [ADD_SCAN_DECISION](state, { currentScanId, newScanDecision }) {
+      state.scans[currentScanId].decisions.push(newScanDecision);
     },
-    [SET_FRAME_EVALUATION](state, evaluation) {
+    /** Pass in frame evaluation then attach the evaluation to the current frame */
+    [SET_FRAME_EVALUATION](state, frameEvaluation) {
       const currentFrame = state.currentFrameId ? state.frames[state.currentFrameId] : null;
       if (currentFrame) {
-        currentFrame.frame_evaluation = evaluation;
+        currentFrame.frame_evaluation = frameEvaluation;
       }
     },
     [SET_CURRENT_SCREENSHOT](state, screenshot) {
