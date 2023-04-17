@@ -662,10 +662,10 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       state[`${indexAxis}IndexSlice`] = value;
       state.sliceLocation = undefined;
     },
-    [SET_SHOW_CROSSHAIRS](state, show) {
+    [SET_SHOW_CROSSHAIRS](state, show: boolean) {
       state.showCrosshairs = show;
     },
-    [SET_STORE_CROSSHAIRS](state, value) {
+    [SET_STORE_CROSSHAIRS](state, value: boolean) {
       state.storeCrosshairs = value;
     },
     [SET_REVIEW_MODE](state, mode) {
@@ -728,19 +728,19 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       // place data in state, adds each experiment to experiments
       const { experiments } = project;
 
-      for (let i = 0; i < experiments.length; i += 1) {
+      for (let experimentIndex = 0; experimentIndex < experiments.length; experimentIndex += 1) {
         // Get a specific experiment from the project
-        const experiment = experiments[i];
+        const experiment = experiments[experimentIndex];
         // set experimentScans[experiment.id] before registering the experiment.id
         // so ExperimentsView doesn't update prematurely
         commit('ADD_EXPERIMENT', {
-          id: experiment.id,
-          value: {
+          experimentId: experiment.id,
+          experiment: {
             id: experiment.id,
             name: experiment.name,
             note: experiment.note,
             project: experiment.project,
-            index: i,
+            index: experimentIndex,
             lockOwner: experiment.lock_owner,
           },
         });
@@ -749,9 +749,9 @@ export const storeConfig:StoreOptions<MIQAStore> = {
         // TODO these requests *can* be run in parallel, or collapsed into one XHR
         // eslint-disable-next-line no-await-in-loop
         const { scans } = experiment;
-        for (let j = 0; j < scans.length; j += 1) {
-          const scan = scans[j];
-          commit('ADD_EXPERIMENT_SCANS', { eid: experiment.id, sid: scan.id });
+        for (let scanIndex = 0; scanIndex < scans.length; scanIndex += 1) {
+          const scan = scans[scanIndex];
+          commit('ADD_EXPERIMENT_SCANS', { experimentId: experiment.id, scanId: scan.id });
 
           // TODO these requests *can* be run in parallel, or collapsed into one XHR
           // eslint-disable-next-line no-await-in-loop
@@ -771,11 +771,11 @@ export const storeConfig:StoreOptions<MIQAStore> = {
             },
           });
 
-          const nextScan = getNextFrame(experiments, i, j);
+          const nextScan = getNextFrame(experiments, experimentIndex, scanIndex);
 
           for (let k = 0; k < frames.length; k += 1) {
             const frame = frames[k];
-            commit('ADD_SCAN_FRAMES', { sid: scan.id, id: frame.id });
+            commit('ADD_SCAN_FRAMES', { scanId: scan.id, id: frame.id });
             commit('SET_FRAME', {
               frameId: frame.id,
               frame: {
