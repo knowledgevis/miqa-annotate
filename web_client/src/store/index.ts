@@ -149,13 +149,15 @@ function loadFile(frame, { onDownloadProgress = null } = {}) {
     { onDownloadProgress },
   );
   fileCache.set(frame.id, promise);
-  return { frameId: frame.id, fileP: promise };
+  return { frameId: frame.id, cachedFile: promise };
 }
 
 /** Gets the data from the selected image file using a webWorker. */
 async function loadFileAndGetData(frame, { onDownloadProgress = null } = {}) {
   const loadResult = loadFile(frame, { onDownloadProgress });
-  return loadResult.cachedFile.then((file) => getImageData(frame.id, file, savedWorker)
+  // Once the file has been cached and is available, call getImageData
+  return loadResult.cachedFile
+    .then((file) => getImageData(frame.id, file, savedWorker))
     .then(({ webWorker, frameData }) => {
       savedWorker = webWorker;
       return Promise.resolve({ frameData });
@@ -169,7 +171,7 @@ async function loadFileAndGetData(frame, { onDownloadProgress = null } = {}) {
         savedWorker.terminate();
         savedWorker = null;
       }
-    }));
+    });
 }
 
 /**
@@ -624,10 +626,10 @@ export const storeConfig:StoreOptions<MIQAStore> = {
       state.errorLoadingFrame = isErrorLoading;
     },
     /** Adds a scanId and it's corresponding scanFrames state */
-    [ADD_SCAN_FRAMES](state, { sid: scanId, id: frameId }) {
+    [ADD_SCAN_FRAMES](state, { scanId, frameId }) {
       state.scanFrames[scanId].push(frameId);
     },
-    [ADD_EXPERIMENT_SCANS](state, { eid: experimentId, sid: scanId }) {
+    [ADD_EXPERIMENT_SCANS](state, { experimentId, scanId }) {
       state.scanFrames[scanId] = [];
       state.experimentScans[experimentId].push(scanId);
     },
@@ -635,7 +637,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
      * Add an experiment to experiments state, it's id to experimentIds state, and
      * set experimentScans state to an empty array
      */
-    [ADD_EXPERIMENT](state, { id: experimentId, value: experiment }) {
+    [ADD_EXPERIMENT](state, { experimentId, experiment }) {
       state.experimentScans[experimentId] = [];
       if (!state.experimentIds.includes(experimentId)) {
         state.experimentIds.push(experimentId);
@@ -781,6 +783,7 @@ export const storeConfig:StoreOptions<MIQAStore> = {
 
           const nextScan = getNextFrame(experiments, experimentIndex, scanIndex);
 
+          // then this is getting each frame associated with the scan
           for (let frameIndex = 0; frameIndex < frames.length; frameIndex += 1) {
             const frame = frames[frameIndex];
             commit('ADD_SCAN_FRAMES', { scanId: scan.id, frameId: frame.id });
