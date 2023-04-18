@@ -505,6 +505,14 @@ export const storeConfig:StoreOptions<MIQAStore> = {
     isGlobal(state) {
       return state.currentProject === null;
     },
+    editRights(state, getters) {
+      return getters.myCurrentProjectRoles.includes('tier_1_reviewer')
+        || getters.myCurrentProjectRoles.includes('tier_2_reviewer')
+        || getters.myCurrentProjectRoles.includes('superuser');
+    },
+    experimentIsEditable(state, getters) {
+      return getters.currentView.lockOwner && getters.currentView.lockOwner.id === state.me.id;
+    },
   },
   mutations: {
     [RESET_STATE](state) {
