@@ -42,7 +42,7 @@ export default {
       'currentScan',
       'currentViewData',
     ]),
-    // Returning representing from VTK
+    // Returning representation from VTK
     representation() {
       return (
         // force add dependency on currentFrame
@@ -365,6 +365,7 @@ export default {
         }
       }
     },
+    /** Place crosshairs at the location of a click event */
     placeCrosshairs(clickEvent) {
       const crosshairSet = new CrosshairSet(
         this.name,

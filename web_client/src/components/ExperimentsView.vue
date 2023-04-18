@@ -46,6 +46,7 @@ export default {
       'currentScan',
       'currentExperiment',
     ]),
+    // Gets the experiments based on the experiment ids
     orderedExperiments() {
       return this.experimentIds.map((expId) => this.experiments[expId]);
     },
@@ -59,6 +60,7 @@ export default {
     },
   },
   watch: {
+    // Begins loading upload modal
     showUploadModal() {
       this.delayPrepareDropZone();
     },
@@ -79,6 +81,7 @@ export default {
       'loadProject',
     ]),
     includeScan,
+    /** Gets all scans associated with the provided experimentId */
     scansForExperiment(expId) {
       const expScanIds = this.experimentScans[expId];
       return expScanIds.filter(
@@ -91,6 +94,8 @@ export default {
         };
       });
     },
+    /** Receives a string like "NCANDA_E08710" (name of an image file),
+     * this is used as the experiment name */
     ellipsisText(str) {
       if (!this.minimal) return str;
       if (str.length > 25) {
@@ -105,6 +110,7 @@ export default {
     },
     /** Assigns a color and character if a decision has been rendered on a given scan */
     decisionToRating(decisions) {
+      // decisions are an array of objects
       if (decisions.length === 0) return {};
       const rating = _.first(_.sortBy(decisions, (decision) => decision.created)).decision;
       let color = 'grey--text';
@@ -165,13 +171,16 @@ export default {
       let experimentId;
       this.uploading = true;
       try {
+        // If we are uploading to a new experiment
         if (!this.uploadToExisting) {
+          // Create a new experiment, below returns instance of ResponseData
           const newExperiment = await djangoRest.createExperiment(
             this.currentProject.id,
             this.experimentNameForUpload,
           );
           experimentId = newExperiment.id;
         } else {
+          // Find the experiment's id that matches the experiment selected
           experimentId = (Object.values(this.experiments).find(
             (experiment: any) => experiment.name === this.experimentNameForUpload,
           ) as { id: string, name: string }).id;

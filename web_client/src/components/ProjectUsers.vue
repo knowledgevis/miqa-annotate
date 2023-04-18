@@ -60,7 +60,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('loadAllUsers');
+    this.loadAllUsers();
     this.selectedPermissionSet = { ...this.permissions };
     this.emailList = this.currentProject.settings.default_email_recipients;
   },

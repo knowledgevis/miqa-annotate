@@ -2,7 +2,7 @@
 import { defineComponent, inject } from 'vue';
 import { User } from '@/types';
 
-// Login/logout button
+// Login/Logout Button
 export default defineComponent({
   name: 'UserButton',
   setup() {
