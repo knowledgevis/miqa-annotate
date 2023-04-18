@@ -9,3 +9,7 @@ export const decisionOptions = {
   'Q?': 'Questionable',
   UN: 'Unusable',
 };
+
+// Controls whether MIQA auto-advances to the next scan when a decision is
+// made on the current scan
+export const AUTO_ADVANCE = false;

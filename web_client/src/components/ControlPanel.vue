@@ -5,7 +5,7 @@ import djangoRest from '@/django';
 
 import UserAvatar from './UserAvatar.vue';
 import ScanDecision from './ScanDecision.vue';
-import DecisionButtons from './DecisionButtons.vue';
+import DecisionButtons from './ControlPanelDecision.vue';
 import WindowWidget from './WindowWidget.vue';
 
 export default defineComponent({
