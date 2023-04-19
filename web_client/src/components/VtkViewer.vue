@@ -87,8 +87,8 @@ export default {
     },
   },
   watch: {
-    slice(value) {
-      this.representation.setSlice(value);
+    slice(newSlice) {
+      this.representation.setSlice(newSlice);
       if (this.SET_CURRENT_VTK_INDEX_SLICES) {
         this.SET_CURRENT_VTK_INDEX_SLICES({
           indexAxis: ijkMapping[this.trueAxis(this.name)],
