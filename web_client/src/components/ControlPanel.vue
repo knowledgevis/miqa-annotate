@@ -32,8 +32,8 @@ export default defineComponent({
 
     const setLock = (lockParameters) => store.dispatch('setLock', lockParameters);
     const setCurrentFrame = (frame) => store.commit('SET_CURRENT_FRAME', frame);
-    const setShowCrosshairs = () => store.commit('SET_SHOW_CROSSHAIRS', showCrosshairs);
-    const setStoreCrosshairs = () => store.commit('SET_STORE_CROSSHAIRS', storeCrosshairs);
+    const setShowCrosshairs = (show) => store.commit('SET_SHOW_CROSSHAIRS', show);
+    const setStoreCrosshairs = (persist) => store.commit('SET_STORE_CROSSHAIRS', persist);
     const updateExperiment = (experiment) => store.commit('UPDATE_EXPERIMENT', experiment);
     return {
       proxyManager,
@@ -112,9 +112,7 @@ export default defineComponent({
     openScanLink() {
       window.open(this.currentViewData.scanLink, '_blank');
     },
-    /**
-     * Release lock on old experiment, set lock on new experiment
-     */
+    /** Release lock on old experiment, set lock on new experiment */
     async switchLock(newExperimentId, oldExperimentId = null, force = false) {
       if (!this.navigateToNextIfCurrentScanNull()) {
         if (this.editRights) {

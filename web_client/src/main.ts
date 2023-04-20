@@ -54,6 +54,7 @@ Sentry.init({
     provide: {
       user: store.state.me,
       MIQAConfig: store.state.MIQAConfig,
+      $snackbar: Vue.prototype.$snackbar,
     },
     mounted() {
       this.$snackbarAttach();
