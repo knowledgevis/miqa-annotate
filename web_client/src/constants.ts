@@ -15,5 +15,6 @@ export const WARNING_DURATION = 2 * 60 * 1000; // the warning box will pop up fo
 export const SESSION_TIMEOUT = 30 * 60 * 1000;
 // Log out after 15 minutes if the user is away from keyboard
 export const IDLE_TIMEOUT = 15 * 60 * 1000;
-// Controls whether MIQA auto-advances to the next scan when a decision is rendered on the current scan
+// Controls whether MIQA auto-advances to the next scan when a decision is rendered on the current
+// scan
 export const AUTO_ADVANCE = false;

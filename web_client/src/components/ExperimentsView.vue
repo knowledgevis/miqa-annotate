@@ -60,11 +60,11 @@ export default {
     },
   },
   watch: {
-    // Begins loading upload modal
+    /** Begins loading upload modal */
     showUploadModal() {
       this.delayPrepareDropZone();
     },
-    // When the project changes, reset the local state for the project.
+    /** When the project changes, reset the local state for the project. */
     currentProject() {
       this.showUploadModal = false;
       this.uploadToExisting = false;

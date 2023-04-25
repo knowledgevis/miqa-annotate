@@ -94,7 +94,7 @@ export default {
       this.downloadLoaded = e.loaded;
       this.downloadTotal = e.total;
     },
-    // Loads a specific frame
+    /** Loads a specific frame */
     async swapToScan() {
       // Get the project/frame id's from the URL
       const { projectId, scanId } = this.$route.params;

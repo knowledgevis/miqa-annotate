@@ -73,7 +73,7 @@ export default {
         labelText: this.convertValueToLabel(name),
       }));
     },
-    // Returns an array containing the name of an artifact and it's current selection state
+    /** Returns an array containing the name of an artifact and it's current selection state */
     chips() {
       return this.artifacts.map((artifact) => [artifact, this.getCurrentChipState(artifact)]);
     },
@@ -143,12 +143,12 @@ export default {
     },
   },
   watch: {
-    // Resets currentViewData for present/absent whenever image changes
+    /** Resets currentViewData for present/absent whenever image changes */
     currentFrame() {
       this.confirmedPresent = [];
       this.confirmedAbsent = [];
     },
-    // If a change is made to comment, present, absent, set warnDecision false
+    /** If a change is made to comment, present, absent, set warnDecision false */
     newComment() {
       this.warnDecision = false;
     },
@@ -183,10 +183,7 @@ export default {
         clearInterval(this.pollInterval);
       }
     },
-    /**
-     * Takes an artifact name, e.g. 'something_artifact' and converts to 'Something artifact'
-     * @param artifactName
-     */
+    /** Takes an artifact name, e.g. 'something_artifact' and converts to 'Something artifact' */
     convertValueToLabel(artifactName) {
       return artifactName
         .replace('susceptibility_metal', 'metal_susceptibility')
