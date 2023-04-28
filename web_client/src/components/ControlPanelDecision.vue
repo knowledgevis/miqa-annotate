@@ -39,6 +39,7 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    const autoAdvance = AUTO_ADVANCE;
     const warnDecision = ref(false);
     const newComment = ref('');
     const confirmedPresent = ref([]);
@@ -79,10 +80,20 @@ export default defineComponent({
     }
 
     /** The list of artifacts generally should not change unless the project changes */
-    const artifacts = computed(() => miqaConfig.value.artifact_options.map((name) => ({
-      value: name,
-      labelText: convertValueToLabel(name),
-    })));
+    const artifacts = computed(() => {
+      if (typeof currentProject.value.settings.artifacts !== 'undefined') {
+        const currentArtifacts = currentProject.value.settings.artifacts;
+        return currentArtifacts.map((name) => ({
+          value: name,
+          labelText: convertValueToLabel(name),
+        }));
+      }
+
+      return miqaConfig.value.artifact_options.map((name) => ({
+        value: name,
+        labelText: convertValueToLabel(name),
+      }));
+    });
     /** Determines which artifacts are suggested.
      * Artifacts are suggested either: 1. By a prior user decision or 2. By auto evaluation
      */
@@ -278,7 +289,7 @@ export default defineComponent({
             newScanDecision: savedObj,
           });
           await refreshTaskOverview();
-          if (AUTO_ADVANCE) {
+          if (autoAdvance) {
             context.emit('handleKeyPress', 'next');
           }
           setSnackbar('Saved decision successfully.');

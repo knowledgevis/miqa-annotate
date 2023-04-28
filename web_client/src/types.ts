@@ -1,7 +1,12 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any *//* eslint camelcase: "off" */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint camelcase: "off" */
 /* eslint no-unused-vars: "off" */
 /* eslint no-shadow: "off" */
 import type { WorkerPool } from 'itk/WorkerPool';
+
+// TODO: Throughout we have snake case properties, these
+// could be converted to camel case using:
+// https://morioh.com/p/8e8b33c25ea1
 
 interface ResponseData {
   detail: string,
@@ -53,7 +58,9 @@ interface Frame {
   scan: string,
   extension: string,
   experiment?: string,
+  // TODO: Passed in from Python as { results: {}, evaluation_model: string }
   frame_evaluation?: string,
+  // TODO: Also has download_url
 }
 
 interface MIQAConfig {
@@ -90,6 +97,7 @@ interface ProjectSettings {
     tier_2_reviewer: [],
   },
   default_email_recipients?: string[],
+  artifacts?: Array<string>[],
 }
 
 interface ProjectTaskOverview {
@@ -128,6 +136,7 @@ interface ScanDecision {
   decision: string,
   note: string,
   user_identified_artifacts: {
+    // [key: string]: string,
     present: string[],
     absent: string[],
   },
