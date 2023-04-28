@@ -32,9 +32,10 @@ module.exports = {
           '**/*.test.tsx',
           '**/*.spec.ts',
           '**/*.spec.tsx',
-        ]
-      }
-    ]
+          '**/vue.config.js',
+        ],
+      },
+    ],
   },
   ignorePatterns: [
     'src/shims-*.d.ts',
