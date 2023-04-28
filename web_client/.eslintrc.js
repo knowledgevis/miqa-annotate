@@ -24,6 +24,17 @@ module.exports = {
     'vue/valid-template-root': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'import/extensions': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: [
+          '**/*.test.ts',
+          '**/*.test.tsx',
+          '**/*.spec.ts',
+          '**/*.spec.tsx',
+        ]
+      }
+    ]
   },
   ignorePatterns: [
     'src/shims-*.d.ts',
