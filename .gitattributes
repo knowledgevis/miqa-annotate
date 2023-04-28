@@ -1,3 +1,4 @@
-*.png -text
+*.png binary
+*.nii.gz binary
 * text eol=lf
 
