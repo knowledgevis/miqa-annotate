@@ -4,6 +4,11 @@ import uuid
 
 from django.db import migrations, models
 import django.db.models.deletion
+from django.core.management import call_command
+
+
+def ingest_settings(apps, schema_editor):
+    call_command('loaddata', 'setting.json')
 
 
 class Migration(migrations.Migration):
@@ -138,4 +143,5 @@ class Migration(migrations.Migration):
                 to='core.setting',
             ),
         ),
+        migrations.RunPython(ingest_settings, reverse_code=lambda x, y: None),
     ]
