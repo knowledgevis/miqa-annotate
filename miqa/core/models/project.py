@@ -91,51 +91,57 @@ class Project(TimeStampedModel, models.Model):
     @property
     def artifacts(self) -> dict:
         """Gets the list of artifacts associated with the project."""
-        if self.artifacts_group:
-            artifacts = Setting.objects.filter(group__id=self.artifacts_group_id)
+        artifacts_group = (
+            self.artifacts_group
+            if self.artifacts_group
+            else Setting.objects.get(key='Default Artifacts Group')
+        )
+        artifacts = Setting.objects.filter(group=artifacts_group)
 
-            return {artifact_name.key: ArtifactState.UNDEFINED.value for artifact_name in artifacts}
-        else:
-            return {}
+        return {artifact_name.key: ArtifactState.UNDEFINED.value for artifact_name in artifacts}
 
     @property
     def model_source_type_mappings(self) -> dict:
         """Gets the list of file type to model mappings associated with the project."""
-        if self.files_to_models_group:
-            model_source_type_mappings = Setting.objects.filter(
-                group__id=self.files_to_models_group_id
-            )
-            this_model_source_type_mapping = {
-                model_source_type_mapping.key: model_source_type_mapping.value
-                for model_source_type_mapping in model_source_type_mappings
-            }
-            return this_model_source_type_mapping
-        else:
-            return {}
+        files_to_models_group = (
+            self.files_to_models_group
+            if self.files_to_models_group
+            else Setting.objects.get(key='Default Evaluation File to Model Mappings Group')
+        )
+        model_source_type_mappings = Setting.objects.filter(group=files_to_models_group)
+        this_model_source_type_mapping = {
+            model_source_type_mapping.key: model_source_type_mapping.value
+            for model_source_type_mapping in model_source_type_mappings
+        }
+        return this_model_source_type_mapping
 
     @property
     def model_mappings(self) -> dict:
         """Gets the list of models associated with the project."""
-        if self.models_group:
-            model_mappings = Setting.objects.filter(group__id=self.models_group_id)
-            this_model_mapping = {
-                model_mapping.key: model_mapping.value for model_mapping in model_mappings
-            }
-            return this_model_mapping
-        else:
-            return {}
+        models_group = (
+            self.models_group
+            if self.models_group
+            else Setting.objects.get(key='Default Evaluation Models Group')
+        )
+        model_mappings = Setting.objects.filter(group=models_group)
+        this_model_mapping = {
+            model_mapping.key: model_mapping.value for model_mapping in model_mappings
+        }
+        return this_model_mapping
 
     @property
     def model_predictions(self) -> dict:
         """Gets the list of predictions associated with the project."""
-        if self.predictions_group:
-            prediction_mappings = Setting.objects.filter(group__id=self.predictions_group_id)
-            this_prediction_mapping = {}
-            for prediction in prediction_mappings:
-                this_prediction_mapping.setdefault(prediction.key, []).append(prediction.value)
-            return this_prediction_mapping
-        else:
-            return {}
+        predictions_group = (
+            self.predictions_group
+            if self.predictions_group
+            else Setting.objects.get(key='Default Evaluation Model Predictions Group')
+        )
+        prediction_mappings = Setting.objects.filter(group=predictions_group)
+        this_prediction_mapping = {}
+        for prediction in prediction_mappings:
+            this_prediction_mapping.setdefault(prediction.key, []).append(prediction.value)
+        return this_prediction_mapping
 
     def __str__(self):
         return self.name
