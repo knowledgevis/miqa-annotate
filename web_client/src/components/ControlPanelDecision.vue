@@ -89,10 +89,7 @@ export default defineComponent({
         }));
       }
 
-      return miqaConfig.value.artifact_options.map((name) => ({
-        value: name,
-        labelText: convertValueToLabel(name),
-      }));
+      return [];
     });
     /** Determines which artifacts are suggested.
      * Artifacts are suggested either: 1. By a prior user decision or 2. By auto evaluation
