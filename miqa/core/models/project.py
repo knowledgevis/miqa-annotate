@@ -1,4 +1,3 @@
-import logging
 from uuid import uuid4
 
 from django.apps import apps
@@ -15,9 +14,6 @@ from miqa.core.models.setting import Setting
 
 
 def default_evaluation_model_mapping():
-    # NEXT:
-    # model_mapping = Setting.objects.filter(group__key__exact='Default Evaluation Model Mapping')
-    # return model_mapping
     return {
         'T1': 'MIQAMix-0',
         'T2': 'MIQAMix-0',
@@ -133,13 +129,10 @@ class Project(TimeStampedModel, models.Model):
     def model_predictions(self) -> dict:
         """Gets the list of predictions associated with the project."""
         if self.predictions_group:
-            logging.debug(f'self.model_predictions_group: {self.predictions_group_id}')
             prediction_mappings = Setting.objects.filter(group__id=self.predictions_group_id)
-            logging.debug(f"project's prediction_mappings: {prediction_mappings}")
             this_prediction_mapping = {}
             for prediction in prediction_mappings:
                 this_prediction_mapping.setdefault(prediction.key, []).append(prediction.value)
-            logging.debug(f'predictions from project: {this_prediction_mapping}')
             return this_prediction_mapping
         else:
             return {}
