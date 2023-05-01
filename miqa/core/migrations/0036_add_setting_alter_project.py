@@ -2,9 +2,9 @@
 
 import uuid
 
+from django.core.management import call_command
 from django.db import migrations, models
 import django.db.models.deletion
-from django.core.management import call_command
 
 
 def ingest_settings(apps, schema_editor):
