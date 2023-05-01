@@ -139,6 +139,18 @@ def test_project_settings_put(user_api_client, project_factory, user_factory, us
             'anatomy_orientation': 'LPS',
             'permissions': expected_perms,
             'default_email_recipients': project.default_email_recipients.split('\n'),
+            'artifacts': [
+                'flow_artifact',
+                'full_brain_coverage',
+                'ghosting_motion',
+                'inhomogeneity',
+                'lesions',
+                'misalignment',
+                'normal_variants',
+                'susceptibility_metal',
+                'swap_wraparound',
+                'truncation_artifact',
+            ],
         }
         my_new_perms = get_perms(user, project)
         if 'collaborator' in my_perms:

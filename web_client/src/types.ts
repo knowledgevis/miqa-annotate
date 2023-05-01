@@ -1,4 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any *//* eslint camelcase: "off" */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint camelcase: "off" */
 /* eslint no-unused-vars: "off" */
 /* eslint no-shadow: "off" */
 import type { WorkerPool } from 'itk/WorkerPool';
@@ -90,6 +91,7 @@ interface ProjectSettings {
     tier_2_reviewer: [],
   },
   default_email_recipients?: string[],
+  artifacts?: Array<string>[],
 }
 
 interface ProjectTaskOverview {

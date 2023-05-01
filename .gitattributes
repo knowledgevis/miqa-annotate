@@ -1,3 +1,6 @@
-*.png -text
 * text eol=lf
+*.png binary
+*.pth* binary
+*.ico binary
+*.nii.gz binary
 
